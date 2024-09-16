@@ -1,0 +1,7 @@
+com\jgc\mvc\controlador\ControlConversor.class
+com\jgc\mvc\vista\InterfazVista.class
+com\jgc\mvc\modelo\Conversor.class
+com\jgc\mvc\vista\VentanaConversor.class
+com\jgc\mvc\modelo\ConversorEurosPesetas.class
+com\jgc\mvc\vista\VentanaConversorTexto.class
+com\jgc\mvc\Mvc.class
