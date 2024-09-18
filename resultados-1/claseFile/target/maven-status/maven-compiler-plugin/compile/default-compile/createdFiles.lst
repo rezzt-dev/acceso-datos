@@ -1,0 +1,5 @@
+com\jgc\clasefile\controlador\ControlCarpeta.class
+com\jgc\clasefile\modelo\Carpeta.class
+com\jgc\clasefile\vista\InterfazVista.class
+com\jgc\clasefile\vista\VentanaCarpetaTexto.class
+com\jgc\clasefile\ClaseFile.class
