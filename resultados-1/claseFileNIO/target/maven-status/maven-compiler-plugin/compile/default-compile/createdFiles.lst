@@ -1,0 +1,9 @@
+com\jgc\clasefile\modelo\ModeloDirectorios.class
+com\jgc\clasefile\vista\VentanaTexto.class
+com\jgc\clasefile\controlador\ControladorCarpeta.class
+com\jgc\clasefile\modelo\Carpeta.class
+com\jgc\clasefile\modelo\Archivo.class
+com\jgc\clasefile\vista\InterfazVista.class
+com\jgc\clasefile\vista\VentanaGrafica.class
+com\jgc\clasefile\controlador\ControladorArchivo.class
+com\jgc\clasefile\ClaseFile.class
