@@ -6,48 +6,138 @@
 package com.jgc.clasefile.modelo;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
- * clase encargada de la logica de la aplicacion
  *
  * @author JGC by Juan Garcia Cazallas
- * @version 1.0
- * Created on 18 sept 2024
+ * version 1.0
+ * created on Sep 20, 2024
  */
-public class Carpeta {
+public class Carpeta extends ModeloDirectorios {
   private String ruta;
   
- //----------------------------------------------------------------------|
-  /**
-   * constructor de la clase
-   * @param ruta ruta de la carpeta
-  */
-  public Carpeta(String ruta) {
-    this.ruta = ruta;
+  public Carpeta (String rutaInput) {
+    super(rutaInput);
+    this.ruta = rutaInput;
+  }
+  
+  public Carpeta () {
+    super();
+  }
+  
+  //------------------------------------------------>
+   // metodos crear carpeta | todas las posibildades =>
+  public void crearCarpeta () {
+    File newDirectory = new File (this.ruta);
+    newDirectory.mkdir();
+  }
+  
+  public void crearCarpeta (String newFolderName) {
+    File newDirectory = new File (this.ruta, newFolderName);
+    newDirectory.mkdir();
+  }
+  
+  public void crearCarpeta (File mainFolder, String newFolderName) {
+    File newDirectory = new File (mainFolder, newFolderName);
+    newDirectory.mkdir();
+  }
+  
+   // metodo "dir" carpeta | extraer informacio contenido =>
+  public ArrayList<String> customDir (File folderPath) {
+    ArrayList<String> informacion = new ArrayList<>();
+    
+    if (folderPath.isDirectory()) {
+      informacion.add("Contenido Directorio: ");
+      String[] infoRaw = folderPath.list();
+      
+      for (int i=0; i<infoRaw.length; i++) {
+        File content = new File(infoRaw[i]);
+        
+        String fileName = content.getName();
+        informacion.add("Contenido " + (i+1) + ": " + fileName);
+      }
+    } else if (folderPath.isFile()) {
+      informacion.add("Informacion Fichero: ");
+      
+      String fileName = folderPath.getName();
+      String fileSize = Long.toString(folderPath.length());
+      informacion.add("Nombre: " + fileName + " | Tamaño: " + fileSize);
+    }
+    
+    return informacion;
+  }
+  
+   // metodo "borrar" | borra fichero o todos los fichero de una carpeta =>
+  public void customDelete (File folderPath) {
+    if (folderPath.isFile()) {
+      folderPath.delete();
+      System.out.println("Fichero: " + folderPath.getName() + " borrado con exito.");
+    } else if (folderPath.isDirectory()) {
+      String[] internalInfo = folderPath.list();
+      
+      for (int i=0; i<internalInfo.length; i++) {
+        File tempData = new File(folderPath, internalInfo[i]);
+        
+        if (!tempData.isDirectory()) {
+          if (tempData.delete()) {
+            System.out.println("Fichero: " + tempData.getName() + " borrado con exito.");
+          } else {
+            System.out.println("No se pudo borrar el archivo " + tempData.getName());
+          }
+        }
+      }
+      
+      if (folderPath.delete()) {
+        System.out.println("Directorio: " + folderPath.getName() + " borrado con exito.");
+      } else {
+        System.out.println("No se pudo borrar el directorio " + folderPath.getName());
+      }
+      
+      System.out.println("Archivos borrados con exito.");
+    }
+  }
+  
+   // metodo "borrar recursivo" | borra todo dentro de una carpeta =>
+  public void customDeleteRecursive (File folderPath) {
+    if (folderPath.isFile()) {
+      folderPath.delete();
+      System.out.println("Fichero: " + folderPath.getName() + " borrado con exito.");
+    } else if (folderPath.isDirectory()) {
+      String[] internalInfo = folderPath.list();
+      
+      for (int i=0; i < internalInfo.length; i++) {
+        File tempData = new File(folderPath, internalInfo[i]);
+        
+        if (!tempData.isDirectory()) {
+          if (tempData.delete()) {
+            System.out.println("Fichero: " + tempData.getName() + " borrado con exito.");
+          } else {
+            System.out.println("No se pudo borrar el archivo " + tempData.getName());
+          }
+        } else {
+          customDeleteRecursive(tempData);
+        }
+      }
+      
+      if (folderPath.delete()) {
+        System.out.println("Directorio: " + folderPath.getName() + " borrado con exito.");
+      } else {
+        System.out.println("No se pudo borrar el directorio " + folderPath.getName());
+      }
+      
+      System.out.println("Archivos borrados con exito.");
+    }
   }
 
-  public Carpeta() {
+  //------------------------------------------------>
+  @Override
+  public String getRuta () {
+    return this.ruta;
   }
   
-  
- //----------------------------------------------------------------------|
-  /**
-   * crea un directorio en la ruta indicada
-   * utiliza el atributo de la clase
-  */
-  public void crearCarpeta() {
-    File directorioNuevo = new File(this.ruta);
-    directorioNuevo.mkdir();
-  }
-  
-  
- //----------------------------------------------------------------------|
-  // getters & setters ->
-  public String getRuta() {
-    return ruta;
-  }
-
-  public void setRuta(String ruta) {
-    this.ruta = ruta;
+  @Override
+  public void setRuta (String rutaInput) {
+    this.ruta = rutaInput;
   }
 }

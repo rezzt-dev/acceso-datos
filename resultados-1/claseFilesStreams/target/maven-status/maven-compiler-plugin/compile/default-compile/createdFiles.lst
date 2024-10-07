@@ -1,0 +1,5 @@
+com\jgc\clasefilesstreams\controlador\ControladorFileStreams.class
+com\jgc\clasefilesstreams\modelo\FileStreamsModelo.class
+com\jgc\clasefilesstreams\vista\InterfazVista.class
+com\jgc\clasefilesstreams\vista\VentanaTexto.class
+com\jgc\clasefilesstreams\ClaseFilesStreams.class
