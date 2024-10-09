@@ -4,9 +4,14 @@
 
 package com.jgc.fileaccesoaleatorio;
 
+import com.jgc.fileaccesoaleatorio.modelo.Empleado;
+import com.jgc.fileaccesoaleatorio.modelo.Escritura;
 import com.jgc.fileaccesoaleatorio.modelo.FicheroEmpleados;
+import com.jgc.fileaccesoaleatorio.modelo.Lectura;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,31 +19,31 @@ import java.util.Scanner;
  */
 public class FileAccesoAleatorio {
 
-  public static void main(String[] args) {
-    FicheroEmpleados fichero = new FicheroEmpleados("empleados.dat");
-    Scanner scanner = new Scanner(System.in);
+  public static void main(String[] args) throws IOException {
+    try (Scanner scanner = new Scanner(System.in)) {
+        FicheroEmpleados fichero = new FicheroEmpleados("empleados.dat");
+        Empleado empleado1 = new Empleado(1, "garcia", 12, 300);
+        Empleado empleado2 = new Empleado(32, "fernandez", 12, 300); 
+        Empleado empleado3 = new Empleado(3, "cadiz", 12, 300);
 
-    System.out.println("Modificar apellido de empleado");
-    System.out.print("Introduce el ID del empleado: ");
-    
-    long id = scanner.nextLong();
-    scanner.nextLine(); // Consumir el salto de línea
 
-    System.out.print("Introduce el nuevo apellido: ");
-    String nuevoApellido = scanner.nextLine();
+        Escritura modeloEs = new Escritura("empleados.dat");
+        modeloEs.escribirEmpleadoFinalArchivo(empleado1);
+        modeloEs.almacenarRegistro(empleado2);
+        modeloEs.almacenarRegistro(empleado3);
 
-    try {
-      boolean modificado = fichero.modificarApellido(id, nuevoApellido);
-      
-      if (modificado) {
-        System.out.println("Apellido modificado con éxito.");
-      } else {
-        System.out.println("No se encontró un empleado con el ID especificado.");
-      }
+
+        Lectura modeloLe = new Lectura("empleados.dat");
+        Empleado newEmpleado = modeloLe.lecturaEmpleado(1);
+        System.out.println(newEmpleado.toString());
+        modeloLe.mostrarRegistros();
+        
     } catch (IOException e) {
-      System.out.println("Error al modificar el apellido: " + e.getMessage());
+        System.err.println("Error de E/S: " + e.getMessage());
+        e.printStackTrace();
+    } catch (Exception e) {
+        System.err.println("Error inesperado: " + e.getMessage());
+        e.printStackTrace();
     }
-
-    scanner.close();
   }
 }
