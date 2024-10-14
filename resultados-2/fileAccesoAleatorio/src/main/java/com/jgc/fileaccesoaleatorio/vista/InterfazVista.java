@@ -5,6 +5,10 @@
 
 package com.jgc.fileaccesoaleatorio.vista;
 
+import com.jgc.fileaccesoaleatorio.controlador.ControladorRegistros;
+import com.jgc.fileaccesoaleatorio.modelo.Escritura;
+import com.jgc.fileaccesoaleatorio.modelo.Lectura;
+
 /**
  *
  * @author JGC by Juan Garcia Cazallas
@@ -22,15 +26,17 @@ public interface InterfazVista {
   static final String BORRADO_LOGICO = "realiza un borrado logico de los registros";
   
  //——————————————————————————————————————————————————————————————————————
- // constructores =>
-  
-  
- //——————————————————————————————————————————————————————————————————————
- // metodos publicos =>
- //——————————————————————————————————————————————————————————————————————
- // metodos privados =>
+ // metodos abstractos =>
+  void setControladorRegistros (ControladorRegistros controlRegistros);
+  void arranca();
+  void operacionExitosa();
+  void escribeResultado(String cadenaTexto);
 
  //——————————————————————————————————————————————————————————————————————
  // getters & setters =>
-  
+  String getRuta ();
+  int getIdentificador();
+  String getApellido();
+  int getDepartamento();
+  double getSalario();
 }
