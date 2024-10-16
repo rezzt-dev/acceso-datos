@@ -121,6 +121,7 @@ public class GestionContenidoDOM {
     }
   }
   
+   // metodo "generateFileFromDOM" | genera un fichero real basado en el de memoria ->
   public void generateFileFromDOM (String inputFilename) {
     try {
       Source domSource = new DOMSource(this.documento);
@@ -132,6 +133,7 @@ public class GestionContenidoDOM {
     }
   }
   
+   // metodo "chargeFileInMemory" | carga un fichero en memoria ->
   public void chargeFileInMemory (String inputFilename) {
     try {
       this.documento = this.docBuilder.parse(new File(inputFilename));
@@ -140,6 +142,82 @@ public class GestionContenidoDOM {
     } catch (SAXException | IOException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
     }
+  }
+  
+   // metodo "addCargoToAllEmpleados" | agrega el elemento cargo a empleado ->
+  public void addCargoToAllEmpleados () {
+    NodeList empleadoList = this.documento.getElementsByTagName("Empleado");
+    
+    for (int i=0; i<empleadoList.getLength(); i++) {
+      Element tempEmpleado =  (Element) empleadoList.item(i);
+      
+      if (tempEmpleado.getElementsByTagName("Cargo").getLength() == 0) {
+        addNodoTexto("Cargo", "Por Especificar", tempEmpleado);
+      }
+    }
+    
+    System.out.println(" > Agregado el elemento 'Cargo' a todos los empleados.");
+  }
+  
+   // metodo "deleteElementFromEmpleado" | elimina un elemento especifico de los empleados ->
+  public void deleteElementFromEmpleado (String inputDeleteElem) {
+    NodeList empleadoList = this.documento.getElementsByTagName("Empleado");
+    
+    for (int i=0; i < empleadoList.getLength(); i++) {
+      Element tempEmpleado = (Element) empleadoList.item(i);
+      NodeList elementsToDelete = tempEmpleado.getElementsByTagName(inputDeleteElem);
+      
+      for (int j = elementsToDelete.getLength() - 1; j >= 0; j--) { // recorrido inverso | evitar problemas con indices
+        Node nodeToDelete = elementsToDelete.item(j);
+        tempEmpleado.removeChild(nodeToDelete);
+      }
+    }
+    
+    System.out.println(" > Elemento '" + inputDeleteElem + "' eliminado a todos los empleados.");
+  }
+  
+   // metodo "modifySalarioFromEmpleado" | modifica el salario de un empleado especifico ->
+  public void modifySalarioFromEmpleado (long inputIdentificador, Double inputSalario) {
+    NodeList empleadoList = this.documento.getElementsByTagName("Empleados");
+    
+    for (int i=0; i<empleadoList.getLength(); i++) {
+      Element tempEmpleado = (Element) empleadoList.item(i);
+      
+      String tempIdentificador = getTagValue("Identificador", tempEmpleado);
+      if (tempIdentificador != null && Long.parseLong(tempIdentificador) == inputIdentificador) {
+        NodeList salarioList = tempEmpleado.getElementsByTagName("Salario");
+        
+        if (salarioList.getLength() > 0) {
+          Element salarioElement = (Element) salarioList.item(0);
+          salarioElement.setTextContent(Double.toString(inputSalario));
+        } else {
+          addNodoTexto("Salario", Double.toString(inputSalario), tempEmpleado);
+        }
+        
+        System.out.println(" > Salario modificado para el empleado con ID: " + tempIdentificador);
+        return;
+      }
+    }
+    
+    System.out.println(" > No se encontro ningun empleado con el identificador: " + inputIdentificador);
+  }
+  
+   // metodo "modifySalarioFromEmpleado" | modifica el salario de un empleado especifico ->
+  public void createNewEmpleado (long inputIdentificador, String inputApellido, int inputDepartamento, Double inputSalario, String inputCargo) {
+    Element newEmpleado = addNodo("Empleado");
+    addNodoTexto("Identificador", Long.toString(inputIdentificador), newEmpleado);
+    addNodoTexto("Apellido", inputApellido, newEmpleado);
+    addNodoTexto("Departamento", Integer.toString(inputDepartamento), newEmpleado);
+    addNodoTexto("Salario", Double.toString(inputSalario), newEmpleado);
+    addNodoTexto("Cargo", inputCargo, newEmpleado);
+  }
+          
+  public void createNewEmpleado (long inputIdentificador, String inputApellido, int inputDepartamento, Double inputSalario) {
+    Element newEmpleado = addNodo("Empleado");
+    addNodoTexto("Identificador", Long.toString(inputIdentificador), newEmpleado);
+    addNodoTexto("Apellido", inputApellido, newEmpleado);
+    addNodoTexto("Departamento", Integer.toString(inputDepartamento), newEmpleado);
+    addNodoTexto("Salario", Double.toString(inputSalario), newEmpleado);
   }
   
  //——————————————————————————————————————————————————————————————————————
@@ -163,7 +241,11 @@ public class GestionContenidoDOM {
     
     if (inputNode.getNodeType() == Node.ELEMENT_NODE) {
       Element tempElement = (Element) inputNode;
-      returnEmpleado.setIdentificador(Long.parseLong(getTagValue("identificador", tempElement)));
+      returnEmpleado.setIdentificador(Long.parseLong(getTagValue("Identificador", tempElement)));
+      returnEmpleado.setApellido(getTagValue("Apellido", tempElement));
+      returnEmpleado.setDepartamento(Integer.parseInt(getTagValue("Departamento", tempElement)));
+      returnEmpleado.setSalario(Double.parseDouble(getTagValue("Salario", tempElement)));
+      returnEmpleado.setCargo(getTagValue("Cargo", tempElement));
     }
     
     return returnEmpleado;

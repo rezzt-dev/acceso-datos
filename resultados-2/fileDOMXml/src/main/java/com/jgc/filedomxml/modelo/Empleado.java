@@ -17,6 +17,7 @@ public class Empleado {
   private String apellido;
   private int departamento;
   private double salario;
+  private String cargo;
 
  //——————————————————————————————————————————————————————————————————————
  // constructores =>
@@ -27,11 +28,12 @@ public class Empleado {
     this.identificador = inputId;
   }
   
-  public Empleado (long inputId, String inputApellido, int inputDepartamento, double inputSalario) {
+  public Empleado (long inputId, String inputApellido, int inputDepartamento, double inputSalario, String inputCargo) {
     this.identificador = inputId;
     this.apellido = inputApellido;
     this.departamento = inputDepartamento;
     this.salario = inputSalario;
+    this.cargo = inputCargo;
   }
   
  //——————————————————————————————————————————————————————————————————————
@@ -40,7 +42,7 @@ public class Empleado {
   // metodos publicos =>
   @Override
   public String toString () {
-    return "Empleado{" + "Identificador: " + identificador + " | Apellido: " + apellido + " | Departamento: " + departamento + " | Salario: " + salario + '}';
+    return "Empleado{" + "Identificador: " + identificador + " | Apellido: " + apellido + " | Departamento: " + departamento + " | Salario: " + salario + " | Cargo: " + cargo + '}';
   }
   
  //——————————————————————————————————————————————————————————————————————
@@ -61,6 +63,10 @@ public class Empleado {
   public double getSalario () {
     return salario;
   }
+  
+  public String getCargo () {
+    return cargo;
+  }
    // setters ->
   public void setIdentificador (long inputId) {
     this.identificador = inputId;
@@ -76,5 +82,9 @@ public class Empleado {
   
   public void setSalario (double inputSalario) {
     this.salario = inputSalario;
+  }
+  
+  public void setCargo (String inputCargo) {
+    this.cargo = inputCargo;
   }
 }
