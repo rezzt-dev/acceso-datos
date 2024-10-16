@@ -7,6 +7,8 @@ package com.jgc.filedomxml.modelo;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -24,6 +26,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
@@ -60,15 +64,19 @@ public class GestionContenidoDOM {
  //——————————————————————————————————————————————————————————————————————
   // metodos privados =>
    // metodo "preProcess" | crea y devuelve un transformer ->
-  private Transformer preProcess () {
+  private Transformer preProcess (boolean indent) {
     Transformer domTransformer = null;
     
     try {
       domTransformer = TransformerFactory.newInstance().newTransformer();
-      domTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      domTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2"); 
     } catch (TransformerConfigurationException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    if (indent == true) {
+      domTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+    } else {
+      domTransformer.setOutputProperty(OutputKeys.INDENT, "no");
     }
     
     return domTransformer;
@@ -106,7 +114,8 @@ public class GestionContenidoDOM {
     try {
       Source domSource = new DOMSource(this.documento);
       Result domResult = new StreamResult(System.out);
-      preProcess().transform(domSource, domResult);
+     
+      preProcess(false).transform(domSource, domResult);
     } catch (TransformerException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -116,7 +125,8 @@ public class GestionContenidoDOM {
     try {
       Source domSource = new DOMSource(this.documento);
       Result domResult = new StreamResult(new File(inputFilename));
-      preProcess().transform(domSource, domResult);
+      
+      preProcess(true).transform(domSource, domResult);
     } catch (TransformerException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -135,5 +145,40 @@ public class GestionContenidoDOM {
  //——————————————————————————————————————————————————————————————————————
  // getters & setters =>
    // getters ->
-
+  public String getMainElement () {
+    return this.documento.getDocumentElement().getNodeName();
+  }
+  
+  private String getTagValue (String inputTag, Element inputElem) {
+    NodeList nodeList = inputElem.getElementsByTagName(inputTag).item(0).getChildNodes();
+    Node node = nodeList.item(0);
+    
+    if (node != null) {
+      return node.getNodeValue();
+    } else return null;
+  }
+  
+  private Empleado getEmpleado (Node inputNode) {
+    Empleado returnEmpleado = new Empleado();
+    
+    if (inputNode.getNodeType() == Node.ELEMENT_NODE) {
+      Element tempElement = (Element) inputNode;
+      returnEmpleado.setIdentificador(Long.parseLong(getTagValue("identificador", tempElement)));
+    }
+    
+    return returnEmpleado;
+  }
+  
+  public List<Empleado> getEmpleados () {
+    List<Empleado> empleadoList = null;
+    
+    empleadoList = new ArrayList<>();
+    NodeList nodeList = this.documento.getElementsByTagName("Empleado");
+      
+    for (int i=0; i<nodeList.getLength(); i++) {
+      empleadoList.add(getEmpleado(nodeList.item(i)));
+    }
+    
+    return empleadoList;
+  }
 }

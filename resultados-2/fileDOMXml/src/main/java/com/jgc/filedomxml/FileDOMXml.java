@@ -4,8 +4,10 @@
 
 package com.jgc.filedomxml;
 
+import com.jgc.filedomxml.modelo.Empleado;
 import com.jgc.filedomxml.modelo.GestionContenidoDOM;
-//import org.w3c.dom.Element;
+import java.util.List;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -24,12 +26,16 @@ public class FileDOMXml {
 //    
 //    Element elem3 = modeloDOM.addNodo("Empleado");
 //    modeloDOM.addNodoTexto("identificador", "3", elem3);
-
-    
-    
-    
+//    
 //    modeloDOM.generateFileFromDOM("./Resources/"+ generalName +".xml");
     modeloDOM.chargeFileInMemory("./Resources/"+ generalName +".xml");
     modeloDOM.screenPrinter();
+    
+    System.out.println("\n");
+    
+    List<Empleado> empleList = modeloDOM.getEmpleados();
+    for (Empleado tempEmple : empleList) {
+      System.out.println(tempEmple.toString());
+    }
   }
 }
