@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Empleados>
+  <Empleado>
+    <identificador>1</identificador>
+  </Empleado>
+  <Empleado>
+    <identificador>2</identificador>
+  </Empleado>
+  <Empleado>
+    <identificador>3</identificador>
+  </Empleado>
+</Empleados>
