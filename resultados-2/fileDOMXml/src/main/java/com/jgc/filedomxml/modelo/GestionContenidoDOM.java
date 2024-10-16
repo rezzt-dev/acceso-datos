@@ -211,7 +211,8 @@ public class GestionContenidoDOM {
     addNodoTexto("Salario", Double.toString(inputSalario), newEmpleado);
     addNodoTexto("Cargo", inputCargo, newEmpleado);
   }
-          
+  
+   // metodo "createNewEmpleado" | crea un nuevo empleado dado unos valores ->
   public void createNewEmpleado (long inputIdentificador, String inputApellido, int inputDepartamento, Double inputSalario) {
     Element newEmpleado = addNodo("Empleado");
     addNodoTexto("Identificador", Long.toString(inputIdentificador), newEmpleado);
