@@ -42,6 +42,7 @@ public class GestionContenidoDOM {
   Document documento;
   DocumentBuilderFactory docFactory;
   DocumentBuilder docBuilder;
+  
 
  //——————————————————————————————————————————————————————————————————————
  // constructores =>
@@ -64,19 +65,14 @@ public class GestionContenidoDOM {
  //——————————————————————————————————————————————————————————————————————
   // metodos privados =>
    // metodo "preProcess" | crea y devuelve un transformer ->
-  private Transformer preProcess (boolean indent) {
+  private Transformer preProcess (String inputIndent) {
     Transformer domTransformer = null;
     
     try {
       domTransformer = TransformerFactory.newInstance().newTransformer();
+      domTransformer.setOutputProperty(OutputKeys.INDENT, inputIndent);
     } catch (TransformerConfigurationException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    
-    if (indent == true) {
-      domTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    } else {
-      domTransformer.setOutputProperty(OutputKeys.INDENT, "no");
     }
     
     return domTransformer;
@@ -110,24 +106,24 @@ public class GestionContenidoDOM {
   }
   
    // metodo "screenPrinter" | muestra en pantalla el resultado ->
-  public void screenPrinter () {
+  public void screenPrinter (String inputIndent) {
     try {
       Source domSource = new DOMSource(this.documento);
       Result domResult = new StreamResult(System.out);
      
-      preProcess(false).transform(domSource, domResult);
+      preProcess(inputIndent).transform(domSource, domResult);
     } catch (TransformerException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
   
    // metodo "generateFileFromDOM" | genera un fichero real basado en el de memoria ->
-  public void generateFileFromDOM (String inputFilename) {
+  public void generateFileFromDOM (String inputFilename, String inputIndent) {
     try {
       Source domSource = new DOMSource(this.documento);
       Result domResult = new StreamResult(new File(inputFilename));
       
-      preProcess(true).transform(domSource, domResult);
+      preProcess(inputIndent).transform(domSource, domResult);
     } catch (TransformerException ex) {
       Logger.getLogger(GestionContenidoDOM.class.getName()).log(Level.SEVERE, null, ex);
     }

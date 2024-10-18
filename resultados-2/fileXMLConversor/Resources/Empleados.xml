@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Empleados>
+    <Empleado>
+        <Identificador>1</Identificador>
+        <Apellido>Garcia</Apellido>
+        <Departamento>11</Departamento>
+        <Salario>1000.0</Salario>
+        <Cargo>Maestro</Cargo>
+    </Empleado>
+    <Empleado>
+        <Identificador>2</Identificador>
+        <Apellido>Aguilar</Apellido>
+        <Departamento>22</Departamento>
+        <Salario>800.0</Salario>
+        <Cargo>Atleta</Cargo>
+    </Empleado>
+    <Empleado>
+        <Identificador>3</Identificador>
+        <Apellido>Molina</Apellido>
+        <Departamento>33</Departamento>
+        <Salario>700.0</Salario>
+        <Cargo>Por Especificar</Cargo>
+    </Empleado>
+</Empleados>

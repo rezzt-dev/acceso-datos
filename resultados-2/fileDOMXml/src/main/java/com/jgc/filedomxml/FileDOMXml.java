@@ -25,7 +25,7 @@ public class FileDOMXml {
     modeloDOM.addCargoToAllEmpleados();
     modeloDOM.modifySalarioFromEmpleado(1, 1000.0);
     
-    modeloDOM.generateFileFromDOM("./Resources/"+ generalName +".xml");
+    modeloDOM.generateFileFromDOM("./Resources/"+ generalName +".xml", "no");
     
     System.out.println("\n");
     

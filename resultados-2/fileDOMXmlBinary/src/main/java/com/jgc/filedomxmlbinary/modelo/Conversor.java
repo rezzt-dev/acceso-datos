@@ -113,7 +113,7 @@ public class Conversor {
    // metodo "addNodoTexto" | agrega a un nodo un valor ->
   public void addNodoTexto(String inputDatoEmple, String inputTexto, Element nodoRoot) {
     Element dato = this.documento.createElement(inputDatoEmple);
-    Text textoData = this.documento.createTextNode(limpiarTexto(inputTexto));
+    Text textoData = this.documento.createTextNode(inputTexto);
     
     dato.appendChild(textoData);
     nodoRoot.appendChild(dato);
@@ -125,7 +125,7 @@ public class Conversor {
         return "";
     }
     return texto.replaceAll("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]", "");
-}
+  }
   
  //——————————————————————————————————————————————————————————————————————
   // metodos publicos =>
