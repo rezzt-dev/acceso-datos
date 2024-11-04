@@ -1,2 +1,4 @@
-com\jgc\bbddjddc\Bbddjddc.class
+com\jgc\bbddjddc\modelo\Departamento.class
 com\jgc\bbddjddc\bbdd\OperacionesBBDD.class
+com\jgc\bbddjddc\Bbddjddc.class
+com\jgc\bbddjddc\modelo\Empleado.class

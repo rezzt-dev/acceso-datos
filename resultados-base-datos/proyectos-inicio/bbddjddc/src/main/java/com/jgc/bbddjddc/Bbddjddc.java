@@ -5,6 +5,8 @@
 package com.jgc.bbddjddc;
 
 import com.jgc.bbddjddc.bbdd.OperacionesBBDD;
+import com.jgc.bbddjddc.modelo.Departamento;
+import com.jgc.bbddjddc.modelo.Empleado;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,10 +25,9 @@ public class Bbddjddc {
   }
   
   public static void insertarDatos () {
-    try {
-      operBBDD.insert("insert into Departamentos values (?,?,?)", 1, "informatica", "ciudad real");
-    } catch (SQLException ex) {
-      Logger.getLogger(Bbddjddc.class.getName()).log(Level.SEVERE, null, ex);
-    }
+//    Departamento tempDep = new Departamento(1, "recursos humanos", "ciudad real");
+//    tempDep.insert();
+    Empleado tempEmple = new Empleado(1,"garcia", "programador", 1234, "09/3/2022", 1400, 3, 2);
+    tempEmple.insert();
   }
 }
