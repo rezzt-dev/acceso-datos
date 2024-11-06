@@ -74,4 +74,36 @@ public class OperacionesBBDD {
     preparedStatement.executeUpdate();
     return  Optional.of(preparedStatement.getGeneratedKeys());
   }
+  
+  private ResultSet executeQuery (String inputQuerySQL, Object... params) throws SQLException {
+    preparedStatement = conexion.prepareStatement(inputQuerySQL);
+    
+    for (int i=0; i<params.length; i++) {
+      preparedStatement.setObject(i+1, params[i]);
+    }
+    
+    return preparedStatement.executeQuery();
+  }
+  
+  public Optional<ResultSet> select (String inputQuerySQL, Object... params) throws SQLException {
+    return Optional.of(executeQuery(inputQuerySQL, params));
+  }
+  
+  private int updateQuery (String inputQuerySQL, Object... params) throws SQLException {
+    preparedStatement = conexion.prepareStatement(inputQuerySQL);
+
+    for (int i=0; i<params.length; i++) {
+      preparedStatement.setObject(i+1, params[i]);
+    }
+     
+    return preparedStatement.executeUpdate();
+  }
+  
+  public int update (String inputQuerySQL, Object... params) throws SQLException {
+    return updateQuery(inputQuerySQL, params);
+  }
+  
+  public int delete (String inputQuerySQL, Object... params) throws SQLException {
+    return updateQuery(inputQuerySQL, params);
+  }
 }

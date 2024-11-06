@@ -118,7 +118,4 @@ public class Empleado {
   public void setNumDept(int numDept) {
     this.numDept = numDept;
   }
-  
-  
-  
 }

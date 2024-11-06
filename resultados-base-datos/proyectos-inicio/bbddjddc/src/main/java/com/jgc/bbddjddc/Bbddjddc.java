@@ -6,10 +6,10 @@ package com.jgc.bbddjddc;
 
 import com.jgc.bbddjddc.bbdd.OperacionesBBDD;
 import com.jgc.bbddjddc.modelo.Departamento;
-import com.jgc.bbddjddc.modelo.Empleado;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *
@@ -19,15 +19,22 @@ public class Bbddjddc {
   static OperacionesBBDD operBBDD = OperacionesBBDD.getInstance();
   
   public static void main(String[] args) {
-    operBBDD.abrirConexion();
-    insertarDatos();
-    operBBDD.cerrarConexion();
-  }
-  
-  public static void insertarDatos () {
-//    Departamento tempDep = new Departamento(1, "recursos humanos", "ciudad real");
-//    tempDep.insert();
-    Empleado tempEmple = new Empleado(1,"garcia", "programador", 1234, "09/3/2022", 1400, 3, 2);
-    tempEmple.insert();
+    try {
+      operBBDD.abrirConexion();
+      
+      Departamento dept = new Departamento();
+      dept.selectById(operBBDD, 1);
+      System.out.println(dept);
+      
+      dept.setLocalidadDep("ciudad real");
+      dept.update(operBBDD);
+      
+      dept.selectById(operBBDD, 1);
+      System.out.println(dept);
+      
+      operBBDD.cerrarConexion();
+    } catch (SQLException ex) {
+      Logger.getLogger(Bbddjddc.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 }
