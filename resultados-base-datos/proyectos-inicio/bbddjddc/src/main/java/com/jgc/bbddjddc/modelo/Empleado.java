@@ -6,7 +6,9 @@
 package com.jgc.bbddjddc.modelo;
 
 import com.jgc.bbddjddc.bbdd.OperacionesBBDD;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +19,6 @@ import java.util.logging.Logger;
  * Created on 4 nov 2024
  */
 public class Empleado {
-  private OperacionesBBDD operacionesBBDD;
-  
   private int numEmple;
   private String apellido;
   private String oficio;
@@ -27,6 +27,8 @@ public class Empleado {
   private double salario;
   private double comision;
   private int numDept;
+  
+  public Empleado () {}
 
   public Empleado(int numEmple, String apellido, String oficio, int dir, String fechaAlt, double salario, double comision, int numDept) {
     this.numEmple = numEmple;
@@ -39,20 +41,71 @@ public class Empleado {
     this.numDept = numDept;
   }
   
-  public void insert () {
+  public void insert (OperacionesBBDD inputBBDD) {
     try {
-      operacionesBBDD.insert("insert into Empleados values (?,?,?,?,?,?,?,?)", numEmple, apellido, oficio, dir, fechaAlt, salario, comision, numDept);
+      inputBBDD.insert("insert into Empleados values (?,?,?,?,?,?,?,?)", numEmple, apellido, oficio, dir, fechaAlt, salario, comision, numDept);
     } catch (SQLException ex) {
       Logger.getLogger(Departamento.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
-
-  public OperacionesBBDD getOperacionesBBDD() {
-    return operacionesBBDD;
+  
+  public void selectById (OperacionesBBDD inputBBDD, int n_emp) {
+    try {
+      Optional<ResultSet> result = inputBBDD.select("SELECT * FROM empleados WHERE emp_no = ?", n_emp);
+      
+      if (result.isPresent()) {
+        while(result.get().next()) {
+          this.numEmple = result.get().getInt("emp_no");
+          this.apellido = result.get().getString("apellido");
+          this.oficio = result.get().getString("oficio");
+          this.dir = result.get().getInt("dir");
+          this.fechaAlt = result.get().getString("fecha_alt");
+          this.salario = result.get().getDouble("salario");
+          this.comision = result.get().getDouble("comision");
+          this.numDept = result.get().getInt("dept_no");
+        }
+      }
+      
+    } catch (SQLException ex) {
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+  
+  public void update (OperacionesBBDD inputBBDD) throws SQLException {
+    inputBBDD.update("UPDATE departamentos set apellido = ?, oficio = ?, dir = ?, fecha_alt = ?, salario = ?, comision = ?, dept_no = ? WHERE emp_no = ?", 
+            this.apellido, this.oficio, this.dir, this.fechaAlt, this.salario, this.comision, this.numDept, this.numEmple);
+  }
+  
+  public static void delete (OperacionesBBDD inputBBDD, int emp_no) throws SQLException {
+    inputBBDD.delete("DELETE FROM empleados WHERE emp_no = ?", emp_no);
+  }
+  
+  public static Optional<ResultSet> selectAll (OperacionesBBDD inputBBDD) {
+    Optional<ResultSet> result = null;
+    
+    try {
+      result = inputBBDD.select("SELECT * FROM empleados");
+    } catch (SQLException ex) {
+      Logger.getLogger(Departamento.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return result;
+  }
+  
+  public static void mostrarResultSet (Optional<ResultSet> result) throws SQLException {
+    if (result.isPresent()) {
+      while(result.get().next()) {
+        System.out.println("Num Empleado: " + result.get().getInt("emp_no") + " | Apellido: " + result.get().getString("apellido") + 
+                " | Oficio: " + result.get().getString("oficio") + " | Direccion: " + result.get().getInt("dir") +
+                " | Fecha de Alta: " + result.get().getString("fecha_alt") + " | Salario: " + result.get().getDouble("salario") + 
+                " | Comision: " + result.get().getDouble("comision") + " | Numero Departamento: " + result.get().getInt("dept_no"));
+      }
+    }
   }
 
-  public void setOperacionesBBDD(OperacionesBBDD operacionesBBDD) {
-    this.operacionesBBDD = operacionesBBDD;
+  @Override
+  public String toString() {
+    return "Empleado{" + "numEmple=" + numEmple + ", apellido=" + apellido + ", oficio=" + oficio + ", dir=" + dir + ", fechaAlt=" + fechaAlt + ", salario=" + salario + ", comision=" + comision + ", numDept=" + numDept + '}';
   }
 
   public int getNumEmple() {

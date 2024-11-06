@@ -59,6 +59,10 @@ public class Departamento {
     inputBBDD.update("UPDATE departamentos set dnombre = ?, loc = ? WHERE dept_no = ?", this.nombreDep, this.localidadDep, this.idDep);
   }
   
+  public static void delete (OperacionesBBDD inputBBDD, int n_dept) throws SQLException {
+    inputBBDD.delete("DELETE FROM departamentos WHERE dept_no = ?", n_dept);
+  }
+  
   public static Optional<ResultSet> selectAll (OperacionesBBDD inputBBDD) {
     Optional<ResultSet> result = null;
     

@@ -22,15 +22,7 @@ public class Bbddjddc {
     try {
       operBBDD.abrirConexion();
       
-      Departamento dept = new Departamento();
-      dept.selectById(operBBDD, 1);
-      System.out.println(dept);
-      
-      dept.setLocalidadDep("ciudad real");
-      dept.update(operBBDD);
-      
-      dept.selectById(operBBDD, 1);
-      System.out.println(dept);
+      Departamento.delete(operBBDD, 2);
       
       operBBDD.cerrarConexion();
     } catch (SQLException ex) {
