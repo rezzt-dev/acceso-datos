@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Carreras>
+    <Carrera>
+        <Identificador>1</Identificador>
+        <Nombre>Juan</Nombre>
+        <Ciudad>Juan</Ciudad>
+        <NotaCorte>2.5589996071096723E-307</NotaCorte>
+    </Carrera>
+</Carreras>
