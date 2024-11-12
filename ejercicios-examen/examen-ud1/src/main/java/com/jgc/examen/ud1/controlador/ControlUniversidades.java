@@ -48,12 +48,9 @@ public class ControlUniversidades implements ActionListener {
       }
       
       case InterfazVista.GENERAR_ARCHIVO_XML -> {
-        try {
-          this.modelo.generarXMLFromCarreras();
-        } catch (FileNotFoundException ex) {
-          Logger.getLogger(ControlUniversidades.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.modelo.generarXMLFromCarreras();
       }
+
       
       case InterfazVista.GENERAR_PLANTILLA_XSL -> {
         this.modelo.generarPlantillaXSL();

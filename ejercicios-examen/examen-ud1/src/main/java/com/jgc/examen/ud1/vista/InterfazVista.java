@@ -24,6 +24,7 @@ public interface InterfazVista {
  // metodos abstractos ->
   void arranca();
   void setControlador(ControlUniversidades inputControlador);
+  void escribirCadena (String inputCadena);
 
  //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
  // getters abstractos ->

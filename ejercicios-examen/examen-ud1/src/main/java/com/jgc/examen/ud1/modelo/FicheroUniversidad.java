@@ -87,90 +87,119 @@ public class FicheroUniversidad {
  //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
  // metodos menu | opcion 2 | dar de alta universidades ->
   public boolean AltaDatosCarrerasUniversitarias () {
-    ArrayList<Universidad> listaUnis = new ArrayList<>();
-    listaUnis.add(new Universidad(3, "Informatica", "Ciudad Real", 7.51));
-    listaUnis.add(new Universidad(5, "Lenguas Modernas", "Albacete", 9.61));
-    listaUnis.add(new Universidad(7, "Biologia", "Cordoba", 6.9));
-    listaUnis.add(new Universidad(8, "Cartografia", "Nosedonde", 10.61));
-    
-    boolean operacionRealizada = false;
-    
-    try (RandomAccessFile randomFile = new RandomAccessFile("./ORIGEN/datosUniversidades.dat", "rw")) {
-      for (Universidad tempUni : listaUnis) {
-        long posUni = (tempUni.getId() - 1) * this.LONGITUD_TOTAL;
-        randomFile.seek(posUni);
-        
-        randomFile.writeInt(tempUni.getId());
-        StringBuffer strBuffer = new StringBuffer(tempUni.getCarrera());
-        strBuffer.setLength(LONGITUD_CARRERA);
-        randomFile.writeChars(strBuffer.toString());
-        
-        strBuffer = new StringBuffer(tempUni.getCiudad());
-        strBuffer.setLength(LONGITUD_CIUDAD);
-        randomFile.writeChars(strBuffer.toString());
-        
-        randomFile.writeDouble(tempUni.getNotaCorte());
+    //Creo los objetos que me piden
+      ArrayList<Universidad> listaUni = new ArrayList<>();
+      listaUni.add(new Universidad(3, "Informatica", "Ciudad Real", 7.51));
+      listaUni.add(new Universidad(5, "Lenguas Modernas", "Albacete", 9.61));
+      listaUni.add(new Universidad(7, "Biologia", "Cordoba", 6.9));
+      listaUni.add(new Universidad(8, "Cartografia", "Nosedonde", 10.61));
+
+      boolean resultado = true;
+
+      //Procedo a añadirlos al fichero datosUniversidades.dat
+      try (RandomAccessFile randomFile = new RandomAccessFile("./ORIGEN/datosUniversidades.dat", "rw")) {
+          for (Universidad u : listaUni) {
+              long posUni = (u.getId() - 1) * this.LONGITUD_TOTAL;
+              //Posiciono el puntero en la posicion correspondiente al ID del objeto
+              randomFile.seek(posUni);
+
+              //Escribo el ID
+              randomFile.writeInt(u.getId());
+
+              //Escribo la Carreara
+              StringBuffer bufferStr = new StringBuffer(u.getCarrera());
+              bufferStr.setLength(CARACTERES_CIUDAD_CARRERA);
+              //Seteo la longitud AL NUMERO DE CARACTERES que debe tener la cadena
+              randomFile.writeChars(bufferStr.toString());
+
+              //Escribo la ciudad
+              bufferStr = new StringBuffer(u.getCiudad());
+              //Seteo la longitud AL NUMERO DE CARACTERES que debe tener la cadena
+              bufferStr.setLength(CARACTERES_CIUDAD_CARRERA);
+              randomFile.writeChars(bufferStr.toString());
+
+              //Escribo la nota de corte
+              randomFile.writeDouble(u.getNotaCorte());
+
+          }
+      } catch (IOException ex) {
+          Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+          resultado = false;
       }
-      
-    } catch (FileNotFoundException ex) {
-      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (IOException ex) {
-      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    
-    return operacionRealizada;
+      return resultado;
   }
  
  //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
  // metodos menu | opcion 3 | generar fichero xml ->
-  public void generarXMLFromCarreras () throws FileNotFoundException {
-    List<Universidad> listaUnis = new ArrayList<>();
+  public void generarXMLFromCarreras(){
+    List<Universidad> universidadList = new ArrayList<>();
+
+// Cargar universidades desde el archivo binario
     try (RandomAccessFile randomFile = new RandomAccessFile("./ORIGEN/datosUniversidades.dat", "r")) {
-        while (randomFile.getFilePointer() < randomFile.length()) {
-            Universidad tempUni = new Universidad();
-            tempUni.setId(randomFile.readInt());
-            
-            StringBuilder carrera = new StringBuilder();
-            for (int i = 0; i < CARACTERES_CIUDAD_CARRERA; i++) {
-                carrera.append(randomFile.readChar());
-            }
-            tempUni.setCarrera(carrera.toString().trim());
-            
-            StringBuilder ciudad = new StringBuilder();
-            for (int i = 0; i < CARACTERES_CIUDAD_CARRERA; i++) {
-                ciudad.append(randomFile.readChar());
-            }
-            tempUni.setCiudad(ciudad.toString().trim());
-            
-            tempUni.setNotaCorte(randomFile.readDouble());
-            
-            if (tempUni.getId() != 0) {
-                listaUnis.add(tempUni);
-            }
+        //Mientras el cursor no este al final del fichero:
+      while (randomFile.getFilePointer() < randomFile.length()) {
+        //Creo un objeto donde almacenar lo que leo
+        Universidad uni = new Universidad();
+
+        //Leo el id y se lo añado al objeto
+        uni.setId(randomFile.readInt());
+
+        //leo la carrera
+        byte[] carrera = new byte[LONGITUD_CARRERA];// Leo la longitud esperada para la cadena EN BYTES
+        randomFile.readFully(carrera);
+        String carreraS = new String(carrera);
+        //Importante esta parte, porque si no, la cadena trae caracteres nulos y XML no acepta eso
+        carreraS=carreraS.replace("\0", "");
+        //IMPORTANTE LO DE ARRIBA
+        uni.setCarrera(carreraS);
+
+        //leo la ciudad
+        byte[] ciudad = new byte[LONGITUD_CIUDAD];
+        randomFile.readFully(ciudad);
+        String ciudadS = new String(ciudad);
+        ciudadS=ciudadS.replace("\0", "");
+        uni.setCiudad(ciudadS);
+
+        //Leo la nota de corte
+        uni.setNotaCorte(randomFile.readDouble());          
+
+        //Finalmente, compruebo el id del objeto y lo añado al array
+        //unicamente si su id es distinto de 0
+        // si es 0 significa que es un registro vacio
+        if(uni.getId()!=0){
+          universidadList.add(uni);
         }
+      }
     } catch (IOException ex) {
-        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     }
 
+    // Crear y guardar el archivo XML a partir de la lista cargada
     try {
-        docFactory = DocumentBuilderFactory.newInstance();
-        docBuilder = docFactory.newDocumentBuilder();
-        DOMImplementation domImplement = docBuilder.getDOMImplementation();
-        this.documento = domImplement.createDocument(null, "Universidades", null);
-        this.documento.setXmlVersion("1.0");
+      //Las siguienteslineas son todas casi iguales en todos los casos
+      docFactory = DocumentBuilderFactory.newInstance();
+      docBuilder = docFactory.newDocumentBuilder();
+      DOMImplementation implementation = docBuilder.getDOMImplementation();
+
+      //La siguiente linea crea el nodo principal del XML
+      this.documento =(Document) implementation.createDocument(null, "Universidades", null);
+      this.documento.setXmlVersion("1.0");
+
     } catch (ParserConfigurationException ex) {
-        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-    for (Universidad tempUni : listaUnis) {
-        Element tempElem = addNodo("Universidad");
-        addNodoTexto("Identificador", Integer.toString(tempUni.getId()), tempElem);
-        addNodoTexto("Carrera", tempUni.getCarrera(), tempElem);
-        addNodoTexto("Ciudad", tempUni.getCiudad(), tempElem);
-        addNodoTexto("NotaCorte", Double.toString(tempUni.getNotaCorte()), tempElem);
+    //Por cada universidad que haya leido previamente:
+    for (Universidad uni : universidadList) {
+      Element elem = addNodo("Universidad");
+      //A ese nodo le añado otros con sus atributos
+      addNodoTexto("Identificador", String.valueOf(uni.getId()), elem);
+      addNodoTexto("Carrera", uni.getCarrera() , elem);
+      addNodoTexto("Ciudad", uni.getCiudad(), elem);
+      addNodoTexto("Nota", Double.toString(uni.getNotaCorte()) , elem);
     }
-
+    //El siguiente metodo genera el archivo XML con la informacion que esta cargada en memoria
     generarArchivoDOM("./ORIGEN/carreras.xml");
+    mostrarEnPantalla();
   }
   
  //——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -186,11 +215,15 @@ public class FicheroUniversidad {
             "    <body> \n" +
             "    <h1>LISTA DE UNIVERSIDADES</h1>\n" +
             "    <table border='1'>\n" +
-            "    <tr><th>ID</th><th>Ciudad</th><th>Carrera</th><th>Nota de corte</th></tr>\n" +
+            "    <tr><th>Identificador</th><th>Carrera</th><th>Ciudad</th><th>Nota</th></tr>\n" +
             "      <xsl:apply-templates select='Universidad' />\n" +
             "    </table>\n" +
+            "    </body>\n" +
             " </xsl:template>\n" +
             " <xsl:template match='Universidad'>\n" +
+            "   <tr>\n" +
+            "    <xsl:apply-templates select='Identificador|Ciudad|Carrera|Nota'/>\n" +
+            "   </tr>\n" +
             " </xsl:template>\n" +
             " <xsl:template match='Identificador|Ciudad|Carrera|Nota'>\n" +
             "   <td><xsl:apply-templates /></td>\n" +
@@ -256,25 +289,31 @@ public class FicheroUniversidad {
   public void generarPaginaWeb () {
     Source origenData = null;
     Source hojaEstilos = null;
-    FileOutputStream paginaHTML = null;
-    
+    FileOutputStream pagHTML = null;
+
     try {
+      //Archivo XML
       origenData = new StreamSource("./ORIGEN/carreras.xml");
+      //Archivo XSL
       hojaEstilos = new StreamSource("./DESTINO/plantilla.xsl");
-      paginaHTML = new FileOutputStream(new File("./DESTINO/carrerasHTML.html"));
-      
-      Result result = new StreamResult(paginaHTML);
+      //El HTML que vamos a crear
+      pagHTML = new FileOutputStream (new File("./DESTINO/carrerasHTML.html"));
+
+      //Redirijo la salida al HTML
+      Result result = new StreamResult(pagHTML);
+      //Construyo un transformador con el archivo XSL como parametro
       Transformer transformer = TransformerFactory.newInstance().newTransformer(hojaEstilos);
+      //Creo el HTML
       transformer.transform(origenData, result);
-    }catch (TransformerConfigurationException ex) {
-      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (TransformerConfigurationException ex) {
+        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     } catch (TransformerException ex) {
-      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     } catch (FileNotFoundException ex) {
-      Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     } finally {
       try {
-        paginaHTML.close();
+        pagHTML.close();
       } catch (IOException ex) {
         Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -320,20 +359,32 @@ public class FicheroUniversidad {
   
    // metodo | generarArchivoDOM | genera el fichero cargado en memoria -->
   private void generarArchivoDOM(String inputFilename) {
+    Source source = new DOMSource(this.documento);
+    Result salida = new StreamResult(new File(inputFilename));
+    
     try {
-      TransformerFactory transformerFactory = TransformerFactory.newInstance();
-      Transformer transformer = transformerFactory.newTransformer();
-      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-      transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-      DOMSource source = new DOMSource(this.documento);
-      StreamResult result = new StreamResult(new File(inputFilename));
-      transformer.transform(source, result);
+      preProcess("no").transform(source, salida); //"no" porque queremos que todo este en la misma linea
     } catch (TransformerException ex) {
       Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
-
   
+   // metodo | escribirEnPantalla | Obtiene el valor de un elemento -->
+  private void mostrarEnPantalla () {
+    try {
+      Source source = new DOMSource(this.documento);
+      Result salida = new StreamResult(System.out);
+
+      preProcess("yes").transform(source, salida);//"yes" para que indente el XML
+
+    } catch (TransformerConfigurationException ex) {
+        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (TransformerException ex) {
+        Logger.getLogger(FicheroUniversidad.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+   // metodo | getTagValue | Obtiene el valor de un elemento -->
   private String getTagValue (String inputTag, Element inputElem) {
     NodeList nodeList = inputElem.getElementsByTagName(inputTag).item(0).getChildNodes();
     Node tempNode = nodeList.item(0);

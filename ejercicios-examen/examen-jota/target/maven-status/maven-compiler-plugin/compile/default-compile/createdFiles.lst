@@ -1,6 +1,6 @@
-com\jaas\examenr1_joseangel_aguilarserrano\vista\InterfazVista.class
-com\jaas\examenr1_joseangel_aguilarserrano\controlador\ControladorExamen.class
-com\jaas\examenr1_joseangel_aguilarserrano\vista\ExamenVistaTexto.class
-com\jaas\examenr1_joseangel_aguilarserrano\ExamenR1_JOSEANGEL_AGUILARSERRANO.class
-com\jaas\examenr1_joseangel_aguilarserrano\modelo\Universidad.class
-com\jaas\examenr1_joseangel_aguilarserrano\modelo\Examen.class
+com/jaas/examenr1_joseangel_aguilarserrano/controlador/ControladorExamen.class
+com/jaas/examenr1_joseangel_aguilarserrano/modelo/Universidad.class
+com/jaas/examenr1_joseangel_aguilarserrano/ExamenR1_JOSEANGEL_AGUILARSERRANO.class
+com/jaas/examenr1_joseangel_aguilarserrano/vista/InterfazVista.class
+com/jaas/examenr1_joseangel_aguilarserrano/modelo/Examen.class
+com/jaas/examenr1_joseangel_aguilarserrano/vista/ExamenVistaTexto.class

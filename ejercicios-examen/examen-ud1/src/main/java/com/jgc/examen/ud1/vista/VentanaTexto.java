@@ -87,6 +87,11 @@ public class VentanaTexto implements InterfazVista {
   }
   
   @Override
+  public void escribirCadena (String inputCadena) {
+    System.out.println(inputCadena);
+  }
+  
+  @Override
   public String leerString () {
     try {
       return in.readLine();
