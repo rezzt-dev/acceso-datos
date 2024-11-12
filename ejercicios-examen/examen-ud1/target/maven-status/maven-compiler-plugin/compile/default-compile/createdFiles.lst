@@ -1,6 +1,6 @@
-com\jgc\examen\ud1\controlador\ControlUniversidades.class
-com\jgc\examen\ud1\modelo\Universidad.class
-com\jgc\examen\ud1\vista\VentanaTexto.class
-com\jgc\examen\ud1\ExamenUd1.class
-com\jgc\examen\ud1\modelo\FicheroUniversidad.class
-com\jgc\examen\ud1\vista\InterfazVista.class
+com/jgc/examen/ud1/ExamenUd1.class
+com/jgc/examen/ud1/controlador/ControlUniversidades.class
+com/jgc/examen/ud1/modelo/Universidad.class
+com/jgc/examen/ud1/vista/InterfazVista.class
+com/jgc/examen/ud1/modelo/FicheroUniversidad.class
+com/jgc/examen/ud1/vista/VentanaTexto.class
