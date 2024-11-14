@@ -1,0 +1,6 @@
+com\jgc\ejercicio3examen\Ejercicio3examen.class
+com\jgc\ejercicio3examen\vista\InterfazVista.class
+com\jgc\ejercicio3examen\controlador\ControladorProducto.class
+com\jgc\ejercicio3examen\modelo\Producto.class
+com\jgc\ejercicio3examen\modelo\ModeloProducto.class
+com\jgc\ejercicio3examen\vista\VentanaTexto.class

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<productos>
+	<producto>
+		<nombre>Leche</nombre>
+		<cantidad>6</cantidad>
+		<supermercado>Mercados Locales</supermercado>
+	</producto>
+	<producto>
+		<nombre>Pan</nombre>
+		<cantidad>2</cantidad>
+		<supermercado>Mercados locales</supermercado>
+	</producto>
+</productos>
