@@ -21,19 +21,19 @@ public class BbddOracle {
   
   public static void main(String[] args) {
     bbdd.abrirConexion();
-    if (bbdd.obtenerInformacionOperacionesResultSet()){
-      Optional<ResultSet> rs = Departamento.selectAll(bbdd);
-
-      try {
-        rs.get().beforeFirst();
-        while(rs.get().next()) {
-          rs.get().updateString("loc", "SEVILLA");
-          rs.get().updateRow();
-        } 
-      } catch (SQLException ex) {
-        Logger.getLogger(Departamento.class.getName()).log(Level.SEVERE, null, ex);
-      }
+    
+    try {
+      int numDept = 20;
+      double subida = 100.00;
+      
+      bbdd.llamarProcedimientoSubidaSal(numDept, subida);
+      int numEmpleados = bbdd.llamarFuncionNEmpleado(numDept);
+      
+      System.out.println(" El numero total de empleados es: " + numEmpleados);
+      
+      bbdd.mostrarNominaEmpleados();
+    } finally {
+      bbdd.cerrarConexion();
     }
-    bbdd.cerrarConexion();
   }
 }

@@ -4,6 +4,7 @@
  */
 
 package com.jgc.bbddoracle.bbdd;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -36,7 +38,7 @@ public class OperacionesBBDD {
   
   private OperacionesBBDD () {
     driver = "oracle.jdbc.driver.OracleDriver";
-    urlconnection = "jdbc:oracle:thin:@localhost:1521";
+    urlconnection = "jdbc:oracle:thin:@localhost:1521/FREEPDB1";
   }
   
   public static OperacionesBBDD getInstance () {
@@ -50,9 +52,9 @@ public class OperacionesBBDD {
   public void abrirConexion () {
     try {
       this.propiedades = new Properties();
-      this.propiedades.setProperty("user", "dam2");
-      this.propiedades.setProperty("password", "dam2");
-      this.propiedades.setProperty("bbdd", "FREE");
+      this.propiedades.setProperty("user", "oracle");
+      this.propiedades.setProperty("password", "oracle");
+      this.propiedades.setProperty("bbdd", "FREEPDB1");
       
       Class.forName(driver);
       this.conexion = DriverManager.getConnection(urlconnection, propiedades);
@@ -245,6 +247,56 @@ public class OperacionesBBDD {
     }
     
     return true;
+  }
+  
+  public void llamarProcedimientoSubidaSal (int numDept, double inputSubida) {
+    String sql = "{call p_subida_sal(?, ?)}";
+    try (CallableStatement stmt = conexion.prepareCall(sql)) {
+      stmt.setInt(1, numDept);
+      stmt.setDouble(2, inputSubida);
+      stmt.execute();
+    } catch (SQLException ex) {
+      Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+  
+  public int llamarFuncionNEmpleado (int numDept) {
+    String sql = "{? = call f_n_empleado(?)}";
+    try (CallableStatement stmt = conexion.prepareCall(sql)) {
+      stmt.registerOutParameter(1, Types.INTEGER);
+      stmt.setInt(2, numDept);
+      stmt.execute();
+      int numEmpleados = stmt.getInt(1);
+      
+      System.out.println("Número de empleados en el departamento " + numDept + ": " + numEmpleados);
+      return numEmpleados;
+    } catch (SQLException ex) {
+      Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+      return -1;
+    }
+  }
+  
+  public void mostrarNominaEmpleados () {
+    String sql = "SELECT apellido, salario, comision, f_nomina(salario, comision, 20) as nomina " + "FROM empleados";
+    
+    try {
+      PreparedStatement stmt = conexion.prepareStatement(sql);
+      ResultSet rs = stmt.executeQuery();
+      
+      System.out.println("Apellido\t\tSalario\t\tComisión\tNómina");
+      System.out.println("------------------------------------------------------------");
+      
+      while (rs.next()) {
+        String apellido = rs.getString("apellido");
+        double salario = rs.getDouble("salario");
+        double comision = rs.getDouble("comision");
+        double nomina = rs.getDouble("nomina");
+        
+        System.out.printf("%-15s\t%.2f\t\t%.2f\t\t%.2f%n", apellido, salario, comision, nomina);
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
   public Connection getConexion() {
