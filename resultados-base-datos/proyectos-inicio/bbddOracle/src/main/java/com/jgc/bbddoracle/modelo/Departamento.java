@@ -179,6 +179,22 @@ public class Departamento {
     
     return  dnombre;
   }
+  
+  public static int obtenerNumeroDepartamentos (OperacionesBBDD bbdd) {
+    int numDeparts = 0;
+    
+    try {
+      Optional<ResultSet> result = bbdd.select("SELECT COUNT(*) AS total FROM Departamentos");
+      
+      if (result.isPresent() && result.get().next()) {
+        numDeparts = result.get().getInt("total");
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(Departamento.class.getName()).log(Level.SEVERE, "Error al obtener el número de departamentos", ex);
+    }
+    
+    return numDeparts;
+  }
 
   @Override
   public String toString() {

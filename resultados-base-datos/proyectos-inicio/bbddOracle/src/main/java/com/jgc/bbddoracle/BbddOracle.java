@@ -23,15 +23,8 @@ public class BbddOracle {
     bbdd.abrirConexion();
     
     try {
-      int numDept = 20;
-      double subida = 100.00;
       
-      bbdd.llamarProcedimientoSubidaSal(numDept, subida);
-      int numEmpleados = bbdd.llamarFuncionNEmpleado(numDept);
       
-      System.out.println(" El numero total de empleados es: " + numEmpleados);
-      
-      bbdd.mostrarNominaEmpleados();
     } finally {
       bbdd.cerrarConexion();
     }

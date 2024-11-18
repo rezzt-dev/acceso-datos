@@ -88,7 +88,7 @@ public class OperacionesBBDD {
   }
   
   private ResultSet executeQuery (String inputQuerySQL, Object... params) throws SQLException {
-    preparedStatement = conexion.prepareStatement(inputQuerySQL);
+    preparedStatement = conexion.prepareStatement(inputQuerySQL, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     
     for (int i=0; i<params.length; i++) {
       preparedStatement.setObject(i+1, params[i]);
