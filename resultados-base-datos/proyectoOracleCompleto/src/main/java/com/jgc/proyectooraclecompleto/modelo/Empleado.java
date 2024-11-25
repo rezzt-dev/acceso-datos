@@ -11,6 +11,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,14 +48,101 @@ public class Empleado {
   
  //—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
    // metodos privados & publicos -->
-    // metodo | insert | inserta un empleado de la bbdd -->
+    // metodo | insert | inserta un empleado de la bbdd -->  
   public void insert (OperacionesBBDD bbdd) {
+    boolean boolCerrar = false;
+    
     try {
-      bbdd.insert("INSERT INTO empleados values (?,?,?,?,?,?,?,?)",
-              numEmp, apellido, oficio, dirEmp, fechaAlta, salario, comision, numDept);
+      while (boolCerrar == true) {
+        // Comprobar si el departamento existe
+        if (!departamentoExiste(bbdd, numDept)) {
+          System.out.println("Error: El departamento no existe.");
+          boolCerrar = true;
+        }
+
+        // Comprobar si el número de empleado ya existe
+        if (empleadoExiste(bbdd, numEmp)) {
+          System.out.println("Error: El número de empleado ya existe.");
+          boolCerrar = true;
+        }
+
+        // Comprobar que el salario sea mayor o igual a 0
+        if (salario <= 0) {
+          System.out.println("Error: El salario debe ser mayor que 0.");
+          boolCerrar = true;
+        }
+
+        // Comprobar que el director exista
+        if (dirEmp == 0 || empleadoExiste(bbdd, dirEmp)) {
+          System.out.println("Error: El director no existe.");
+          boolCerrar = true;
+        }
+
+        // Comprobar que el apellido y el oficio no sean nulos
+        if (apellido == null || apellido.trim().isEmpty()) {
+          System.out.println("Error: El apellido no puede ser nulo o vacío.");
+          boolCerrar = true;
+        }
+
+        if (oficio == null || oficio.trim().isEmpty()) {
+          System.out.println("Error: El oficio no puede ser nulo o vacío.");
+          boolCerrar = true;
+        }
+        
+        fechaAlta = Date.valueOf(LocalDate.now());
+        bbdd.insert("INSERT INTO empleados values (?,?,?,?,?,?,?,?)",
+                numEmp, apellido, oficio, dirEmp, fechaAlta, salario, comision, numDept);
+        
+        System.out.println("Empleado insertado correctamente");
+        selectById(bbdd, numEmp);
+        
+      }
     } catch (SQLException ex) {
       Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
     }
+  }
+  
+  private boolean departamentoExiste (OperacionesBBDD bbdd, int nDept) {
+    boolean deptExiste = false;
+    
+    try {
+      Optional<ResultSet> result = bbdd.select("SELECT COUNT(*) FROM departamentos WHERE dept_no = ?", nDept);
+      if (result.isPresent()) {
+        ResultSet rs = result.get();
+        
+        if (rs.next()) {
+          deptExiste = rs.getInt(1)>0;
+        } else {
+          deptExiste = false;
+        }
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return deptExiste;
+  }
+  
+  private boolean empleadoExiste (OperacionesBBDD bbdd, int nEmp) {
+    boolean empleExiste = false;
+    
+    try {
+      Optional<ResultSet> result = bbdd.select("SELECT COUNT(*) FROM empleados WHERE emp_no = ?", nEmp);
+      
+      if (result.isPresent()) {
+        ResultSet rs = result.get();
+        
+        if (rs.next()) {
+          empleExiste = rs.getInt(1)>0;
+        } else {
+          empleExiste = false;
+        }
+      }
+    } catch (SQLException ex) {
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    return empleExiste;
   }
 
    //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -67,6 +155,8 @@ public class Empleado {
       Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
+  
+  
   
    //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
     // metodo | delete | elimina un empleado de la bbdd -->
