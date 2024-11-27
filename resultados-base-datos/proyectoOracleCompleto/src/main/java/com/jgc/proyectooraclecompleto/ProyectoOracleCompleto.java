@@ -4,12 +4,23 @@
 
 package com.jgc.proyectooraclecompleto;
 
+import com.jgc.proyectooraclecompleto.conection.OperacionesBBDD;
+import com.jgc.proyectooraclecompleto.modelo.Empleado;
+
 /**
  *
  * @author rezzt
  */
 public class ProyectoOracleCompleto {
+  private static OperacionesBBDD bbdd = OperacionesBBDD.getInstance();
+  
   public static void main(String[] args) {
-    System.out.println("Hello World!");
+    bbdd.abrirConexion();
+    
+//    Empleado.getSalarioMedioNumeroEmpleadosDept(bbdd, 20);
+    
+//    bbdd.obtenerClavesFromTabla("EMPLEADOS");
+
+    bbdd.cerrarConexion();
   }
 }

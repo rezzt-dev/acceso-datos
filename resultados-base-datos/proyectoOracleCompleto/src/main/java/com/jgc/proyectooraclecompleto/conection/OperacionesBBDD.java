@@ -197,18 +197,32 @@ public class OperacionesBBDD {
    //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
     // metodo | getNumReturnRows | obtiene el numero de las filas devueltas -->
   public void obtenerNumeroFilasDevueltas(Optional<ResultSet> rs) {
+    int rows = 0; //0 porque si rs.last no funciona no entraría en el if y entonces es que no ha devuelto datos
+
+    if (rs.isPresent()) {
+      ResultSet result = rs.get();
+      rows = obtenerNumeroFilas(result);
+    }
+
+    System.out.println("El número de filas devueltas es:" + rows);
+  }
+  
+   //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // metodo | obtenerNumeroFilas | devuelve el numero de filas indicado por un resultset -->
+  public int obtenerNumeroFilas (ResultSet inputRS) {
+    int numFilas = 0;
+    
     try {
-      int rows = 0; //0 porque si rs.last no funciona no entraría en el if y entonces es que no ha devuelto datos
-
-      if (rs.get().last()) {
-        rows = rs.get().getRow();
-        rs.get().beforeFirst();
+      if (inputRS.last()) {
+        numFilas = inputRS.getRow();
+        inputRS.beforeFirst();
       }
-
-      System.out.println("El número de filas devueltas es:" + rows);
     } catch (SQLException ex) {
       Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+      numFilas = -1; // devolvemos -1 si hay algun problema
     }
+    
+    return numFilas;
   }
   
    //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -287,7 +301,55 @@ public class OperacionesBBDD {
       Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
       return -1;
     }
-  } 
+  }
+
+   //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // metodo | obtenerClavesFromTabla | obtenemos clave primaria y clave ajenas de una tabla -->
+  public void obtenerClavesFromTabla (String inputTabla) {
+    try {
+      DatabaseMetaData metaData = conexion.getMetaData();
+      
+      ResultSet rsClavesPrimarias = metaData.getPrimaryKeys(null, null, inputTabla);
+      System.out.println(" > Clave primaria de la tabla: ");
+      while (rsClavesPrimarias.next()) {
+        String pkColumn = rsClavesPrimarias.getString("COLUMN_NAME");
+        System.out.println("  - Columna: " + pkColumn);
+      }
+      rsClavesPrimarias.close();
+      
+      ResultSet rsClavesAjenasOut = metaData.getExportedKeys(null, null, inputTabla);
+      System.out.println(" > Claves ajenas que salen de la tabla: ");
+      while (rsClavesAjenasOut.next()) {
+        String fkColumn = rsClavesAjenasOut.getString("FKCOLUMN_NAME");
+        String targetTable = rsClavesAjenasOut.getString("PKTABLE_NAME");
+        String targetColumn = rsClavesAjenasOut.getString("PKCOLUMN_NAME");
+        
+        System.out.println("  - Columna: " + fkColumn + " -> Tabla Destino: " + targetTable + ", Columna Destino: " + targetColumn);
+      }
+      rsClavesAjenasOut.close();
+      
+      ResultSet rsClavesAjenasIn = metaData.getImportedKeys(null, null, inputTabla);
+      
+      if (rsClavesAjenasIn.isBeforeFirst()) {
+        System.out.println(" > No hay claves ajenas que entran en la tabla.");
+      } else {
+        System.out.println(" > Claves ajenas que entran en la tabla: ");
+        while (rsClavesAjenasIn.next()) {
+          String fkColumn = rsClavesAjenasOut.getString("FKCOLUMN_NAME");
+          String sourceTable = rsClavesAjenasOut.getString("FKTABLE_NAME");
+          String sourceColumn = rsClavesAjenasOut.getString("PKCOLUMN_NAME");
+
+          System.out.println("  - Columna " + sourceColumn + " de la tabla " + sourceTable + " -> apunta a " + fkColumn);
+        }
+      }
+      rsClavesAjenasIn.close();
+      
+      
+      
+    } catch (SQLException ex) {
+      Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
   
  //—————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
    // getters, setters & overrides ->

@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -361,6 +363,33 @@ public class Empleado {
       int emplesAfectados = bbdd.update("UPDATE empleados SET salario = salario * ?", factor);
       
       System.out.println(" > Se actualzaron los salario de " + emplesAfectados + " empleados.");
+      
+    } catch (SQLException ex) {
+      Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+  
+   //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+    // metodo | getSalarioMedioNumeroEmpleadosDept | obtiene el salario medio y el numero de empleados en un departamento -->
+  public static void getSalarioMedioNumeroEmpleadosDept (OperacionesBBDD bbdd, int nDept) {
+    try {
+      List<Empleado> listaEmple = new ArrayList<>();
+      double sumaSalarios = 0;
+      
+      Optional<ResultSet> result = bbdd.select("SELECT * FROM empleados WHERE dept_no = ?", nDept);
+      if (result.isPresent()) {
+        ResultSet rs = result.get();
+        
+        while (rs.next()) {
+          Empleado tempEmple = new Empleado(rs.getInt("emp_no"), rs.getString("apellido"), rs.getString("oficio"), rs.getInt("dir"), rs.getDate("fecha_alt"),
+          rs.getDouble("salario"), rs.getDouble("comision"), rs.getInt("dept_no"));
+          listaEmple.add(tempEmple);
+          sumaSalarios += tempEmple.getSalario();
+        }
+      }
+      
+      System.out.println(" > Departamento " + nDept + ": Numero Empleados: " + listaEmple.size());
+      System.out.println(" > Salario medio: " + (sumaSalarios / listaEmple.size()));
       
     } catch (SQLException ex) {
       Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
