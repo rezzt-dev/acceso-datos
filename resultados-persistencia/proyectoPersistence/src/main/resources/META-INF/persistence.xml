@@ -1,0 +1,19 @@
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="3.1"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
+
+    <persistence-unit name="com.jgc_proyectoPersistence_jar_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <class>com.jgc.proyectopersistence.Departamentos</class>
+        <class>com.jgc.proyectopersistence.Empleados</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/freepdb1" />
+            <property name="jakarta.persistence.jdbc.user" value="dam2" />
+            <property name="jakarta.persistence.jdbc.password" value="dam2" />
+            <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+        </properties>
+    </persistence-unit>
+</persistence>
