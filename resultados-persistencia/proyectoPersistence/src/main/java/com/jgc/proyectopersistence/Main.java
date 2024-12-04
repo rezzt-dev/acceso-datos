@@ -13,21 +13,6 @@ public class Main {
 
   public static void main(String[] args) {
     inicializaFactory();
-
-    // Ejemplo de uso de los métodos
-    // Primero asegurémonos de tener un departamento
-    Departamentos departamento = entityManager.find(Departamentos.class, (short) 1); // Convertir 1 a Short
-
-    // Insertar un nuevo empleado
-    insertarEmpleado((short) 1001, "Pérez", "Desarrollador", (short) 7839, new Date(), new BigDecimal("3500"), new BigDecimal("500"), departamento);
-
-    // Modificar un empleado existente (usando ID de 1001 como ejemplo)
-    modificarEmpleado((short) 1001, "Pérez", "Senior Developer", (short) 7839, new Date(), new BigDecimal("4000"), new BigDecimal("600"));
-
-    // Eliminar un empleado (usando ID de 1001 como ejemplo)
-    eliminarEmpleado((short) 1001);
-
-    // Cerrar EntityManager y Factory
     entityManager.close();
     emFactory.close();
   }
