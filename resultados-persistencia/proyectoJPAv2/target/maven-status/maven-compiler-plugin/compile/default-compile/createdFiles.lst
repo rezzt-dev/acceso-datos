@@ -1,0 +1,14 @@
+com\mmc\proyectojpav2\exceptions\PreexistingEntityException.class
+com\mmc\proyectojpav2\ProductosJpaController.class
+com\mmc\proyectojpav2\DepartamentosJpaController.class
+com\mmc\proyectojpav2\exceptions\IllegalOrphanException.class
+com\mmc\proyectojpav2\Productos.class
+com\mmc\proyectojpav2\ClientesJpaController.class
+com\mmc\proyectojpav2\EmpleadosJpaController.class
+com\mmc\proyectojpav2\Clientes.class
+com\mmc\proyectojpav2\Ventas.class
+com\mmc\proyectojpav2\exceptions\NonexistentEntityException.class
+com\mmc\proyectojpav2\Departamentos.class
+com\mmc\proyectojpav2\Empleados.class
+com\mmc\proyectojpav2\VentasJpaController.class
+com\mmc\proyectojpav2\ProyectoJPAv2.class
