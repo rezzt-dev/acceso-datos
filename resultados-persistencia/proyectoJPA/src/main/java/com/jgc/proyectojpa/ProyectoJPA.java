@@ -20,6 +20,9 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.jgc.proyectojpa.model.Departamentos;
+import com.jgc.proyectojpa.model.Empleados;
+
 /**
  *
  * @author rezzt

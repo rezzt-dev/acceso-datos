@@ -9,9 +9,9 @@
     <class>com.jgc.proyectojpa.Empleados</class>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@//localhost:1521/freepdb1"/>
-      <property name="jakarta.persistence.jdbc.user" value="dam2"/>
+      <property name="jakarta.persistence.jdbc.user" value="persis"/>
       <property name="jakarta.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-      <property name="jakarta.persistence.jdbc.password" value="dam2"/>
+      <property name="jakarta.persistence.jdbc.password" value="persis"/>
     </properties>
   </persistence-unit>
 </persistence>
