@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.jgc.proyectojpa.controlers;
+package com.jgc.proyectojpa.controllers;
 
-import com.jgc.proyectojpa.Departamentos;
-import com.jgc.proyectojpa.Empleados;
 import com.jgc.proyectojpa.exceptions.NonexistentEntityException;
 import com.jgc.proyectojpa.exceptions.PreexistingEntityException;
+import com.jgc.proyectojpa.model.Departamentos;
+import com.jgc.proyectojpa.model.Empleados;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.io.Serializable;
