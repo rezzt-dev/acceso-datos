@@ -6,17 +6,16 @@ package com.jgc.proyectojpa.controllers;
 
 import com.jgc.proyectojpa.exceptions.NonexistentEntityException;
 import com.jgc.proyectojpa.exceptions.PreexistingEntityException;
-import com.jgc.proyectojpa.model.Clientes;
-import com.jgc.proyectojpa.model.Productos;
-import com.jgc.proyectojpa.model.Ventas;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import com.jgc.proyectojpa.model.Clientes;
+import com.jgc.proyectojpa.model.Productos;
+import com.jgc.proyectojpa.model.Ventas;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
 
 /**

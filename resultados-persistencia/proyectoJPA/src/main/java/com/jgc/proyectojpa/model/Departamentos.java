@@ -110,7 +110,7 @@ public class Departamentos implements Serializable {
 
   @Override
   public String toString() {
-    return "com.jgc.proyectojpa.Departamentos[ deptNo=" + deptNo + " ]";
+    return "com.jgc.proyectojpa.model.Departamentos[ deptNo=" + deptNo + " ]";
   }
   
 }

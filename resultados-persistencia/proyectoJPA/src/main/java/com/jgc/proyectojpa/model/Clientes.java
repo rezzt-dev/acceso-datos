@@ -154,7 +154,7 @@ public class Clientes implements Serializable {
 
   @Override
   public String toString() {
-    return "com.jgc.proyectojpa.Clientes[ id=" + id + " ]";
+    return "com.jgc.proyectojpa.model.Clientes[ id=" + id + " ]";
   }
   
 }

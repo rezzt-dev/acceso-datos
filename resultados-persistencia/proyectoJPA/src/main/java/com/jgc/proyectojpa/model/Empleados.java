@@ -159,7 +159,7 @@ public class Empleados implements Serializable {
 
   @Override
   public String toString() {
-    return "com.jgc.proyectojpa.Empleados[ empNo=" + empNo + " ]";
+    return "com.jgc.proyectojpa.model.Empleados[ empNo=" + empNo + " ]";
   }
   
 }

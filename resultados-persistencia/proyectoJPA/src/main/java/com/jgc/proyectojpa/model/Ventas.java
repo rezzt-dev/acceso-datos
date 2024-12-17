@@ -131,7 +131,7 @@ public class Ventas implements Serializable {
 
   @Override
   public String toString() {
-    return "com.jgc.proyectojpa.Ventas[ idventa=" + idventa + " ]";
+    return "com.jgc.proyectojpa.model.Ventas[ idventa=" + idventa + " ]";
   }
   
 }

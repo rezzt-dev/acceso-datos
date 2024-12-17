@@ -15,11 +15,15 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.jgc.proyectojpa.controllers.DepartamentosJpaController;
+import com.jgc.proyectojpa.exceptions.NonexistentEntityException;
 import com.jgc.proyectojpa.model.Departamentos;
 import com.jgc.proyectojpa.model.Empleados;
 
@@ -34,7 +38,7 @@ public class ProyectoJPA {
   
   public static void main(String[] args) {
     inicializarFactory();
-    mostrarDatosEmpleFromDept(10);
+    listarEmplesFromDept(10);
     cerrarFactory();
   }
   
@@ -191,5 +195,149 @@ public class ProyectoJPA {
         System.out.println("  - Empleado: " + tempEmple.getApellido() + " | Salario: " + tempEmple.getSalario());
       }
     }
+  }
+
+ //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+ // metodos usando los controladores de las clases
+  public static void crearEmpleDept () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+
+    try {
+      Departamentos dept = new Departamentos((short) 77);
+      dept.setDnombre("BIG DATA");
+      dept.setLoc("TALAVERA");
+
+      dept.setEmpleadosCollection(new ArrayList<>());
+
+      deptController.create(dept);
+
+      System.out.println("  - Departamentos y empleados creados existosamente.");
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public static void insertarDeptWithEmple () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+
+    try {
+      Departamentos dept = new Departamentos((short) 99);
+      dept.setDnombre("BIG DATA");
+      dept.setLoc("TOLEDO");
+
+      Empleados newEmpleado = new Empleados((short) 7521);
+
+      Collection<Empleados> listEmpleados = new ArrayList<Empleados>();
+      listEmpleados.add(newEmpleado);
+
+      dept.setEmpleadosCollection(listEmpleados);
+      deptController.create(dept);
+
+      System.out.println("  - Departamentos y empleados creados existosamente.");
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public static void borrarDept () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+
+    try {
+      deptController.destroy((short) 99);
+    } catch (NonexistentEntityException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public static void listDept () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    List<Departamentos> deptList = deptController.findDepartamentosEntities();
+    
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+    System.out.println(" > Lista de Departamentos");
+    for (Departamentos auxDept : deptList) {
+      System.out.println("  - Nombre Dept: " + auxDept.getDnombre() + " | Numero Empleados: " + auxDept.getEmpleadosCollection().size());
+    }
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+  }
+
+  public static void listDeptTramos () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    List<Departamentos> deptList;
+    
+    listDept();
+    deptList = deptController.findDepartamentosEntities(3, 0);
+    
+    System.out.println(" > Trae 3 resgistros empezando en la posicion 0.");
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+    
+    System.out.println(" > Lista de Departamentos");
+    for (Departamentos auxDept : deptList) {
+      System.out.println("  - Nombre Dept: " + auxDept.getDnombre() + " | Numero Empleados: " + auxDept.getEmpleadosCollection().size());
+    }
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+
+    deptList = deptController.findDepartamentosEntities(3, 1);
+    System.out.println(" > Trae 3 resgistros empezando en la posicion 1.");
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+    
+    System.out.println(" > Lista de Departamentos");
+    for (Departamentos auxDept : deptList) {
+      System.out.println("  - Nombre Dept: " + auxDept.getDnombre() + " | Numero Empleados: " + auxDept.getEmpleadosCollection().size());
+    }
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+
+  }
+
+  public static void countNumDepts () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    int numDepts = deptController.getDepartamentosCount();
+
+    System.out.println(" > Numero de Departamentos: " + numDepts);
+  }
+
+  public static void getDeptData () {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    int numDeptFind = 10;
+    Departamentos auxDept = deptController.findDepartamentos((short) numDeptFind);
+
+    System.out.println(" > Num Dept: " + numDeptFind + " | Nombre: " + auxDept.getDnombre());
+  }
+
+  public static void modificarDept (int inputId) {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    Departamentos auxDept = deptController.findDepartamentos((short) inputId);
+
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+
+    try {
+      auxDept.setDeptNo((short) inputId);
+      auxDept.setDnombre("CONTABILIDAD");
+      auxDept.setLoc("MADRID");
+
+      deptController.edit(auxDept);
+      System.out.println(" > Dept " + inputId + " modificado correctamente.");
+    } catch (NonexistentEntityException ex) {
+      ex.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+  }
+
+  public static void listarEmplesFromDept (int inputId) {
+    DepartamentosJpaController deptController = new DepartamentosJpaController(emFactory);
+    Departamentos auxDept = deptController.findDepartamentos((short) inputId);
+
+    System.out.println(" > Dept " + inputId + " | Nombre: " + auxDept.getDnombre() + " | Num Empleados: " + auxDept.getEmpleadosCollection().size());
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
+
+    Collection<Empleados> listaEmples = auxDept.getEmpleadosCollection();
+    for (Empleados auxEmple : listaEmples) {
+      System.out.println("  - Empleado " + auxEmple.getEmpNo() + " | Apellido: " + auxEmple.getApellido());
+    }
+
+    System.out.println("——————————————————————————————————————————————————————————————————————————");
   }
 }

@@ -11,7 +11,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class ConsultaController {
+@SuppressWarnings("unchecked")
+public class ConsultaEjemplos {
   static EntityManagerFactory emFactory;
   static EntityManager entityManager;
 
@@ -37,6 +38,7 @@ public class ConsultaController {
  //————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
   private static void consultaSimple () {
     Query consulta = entityManager.createQuery("Select UPPER(d.dnombre) from Departamentos d");
+    
     List<String> lista = consulta.getResultList();
 
     for (String aux : lista) {
@@ -45,6 +47,7 @@ public class ConsultaController {
     }
   }
 
+  
   private static void consultaAvanzada () {
     TypedQuery<Object[]> consulta = entityManager.createQuery("Select d.dnombre, d.loc from Departamentos d", Object[].class);
     List<Object[]> lista = consulta.getResultList();
@@ -76,5 +79,18 @@ public class ConsultaController {
       System.out.println("  - Dept Name: " + auxDept.getDnombre());
       System.out.println("——————————————————————————————————————————");
     }
+  }
+
+  private static void consultaAlmacenadaParams (int inputDeptNo) {
+    Query consulta = entityManager.createNamedQuery("Departamentos.findByDeptNo");
+    consulta.setParameter("deptNo", inputDeptNo);
+
+    List<Departamentos> listaDepts = consulta.getResultList();
+
+    for (Departamentos auxDept : listaDepts) {
+      System.out.println("——————————————————————————————————————————");
+      System.out.println("  - Nombre: " + auxDept.getDnombre());
+    }
+    System.out.println("———————————————————————————————————————————————————————————————————————————");
   }
 }

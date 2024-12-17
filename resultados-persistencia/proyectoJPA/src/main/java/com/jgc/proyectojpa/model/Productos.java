@@ -141,7 +141,7 @@ public class Productos implements Serializable {
 
   @Override
   public String toString() {
-    return "com.jgc.proyectojpa.Productos[ id=" + id + " ]";
+    return "com.jgc.proyectojpa.model.Productos[ id=" + id + " ]";
   }
   
 }
