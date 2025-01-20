@@ -7,11 +7,12 @@
     <class>com.jgc.proyectojpa.Clientes</class>
     <class>com.jgc.proyectojpa.Ventas</class>
     <class>com.jgc.proyectojpa.Empleados</class>
-    <class>com.jgc.proyectojpa.model.Ventas</class>
+
     <class>com.jgc.proyectojpa.model.Clientes</class>
-    <class>com.jgc.proyectojpa.model.Empleados</class>
-    <class>com.jgc.proyectojpa.model.Productos</class>
     <class>com.jgc.proyectojpa.model.Departamentos</class>
+    <class>com.jgc.proyectojpa.model.Productos</class>
+    <class>com.jgc.proyectojpa.model.Ventas</class>
+    <class>com.jgc.proyectojpa.model.Empleados</class>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:FREE"/>
       <property name="jakarta.persistence.jdbc.user" value="dam2"/>

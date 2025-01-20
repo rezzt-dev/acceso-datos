@@ -12,7 +12,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.LockModeType;
 
-public class GeneralController {
+public class GeneralTester {
   static EntityManagerFactory emfactory;
   static EntityManager entitymanager;
   static Departamentos departamentos;
@@ -36,7 +36,7 @@ public class GeneralController {
       System.out.println(" > Pulsa ENTER para continuar...");
       String sTexto = bReader.readLine();
     } catch (IOException ex) {
-      Logger.getLogger(GeneralController.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(GeneralTester.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 }
