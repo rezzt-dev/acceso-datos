@@ -7,19 +7,14 @@ package com.jgc.proyectojpa.model;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -29,7 +24,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "CLIENTES")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Clientes.findAll", query = "SELECT c FROM Clientes c"),
   @NamedQuery(name = "Clientes.findById", query = "SELECT c FROM Clientes c WHERE c.id = :id"),
@@ -43,28 +37,15 @@ public class Clientes implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "ID")
   private Short id;
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "NOMBRE")
   private String nombre;
-  @Size(max = 50)
-  @Column(name = "DIRECCION")
   private String direccion;
-  @Size(max = 50)
-  @Column(name = "POBLACION")
   private String poblacion;
-  @Size(max = 20)
-  @Column(name = "TELEF")
   private String telef;
-  @Size(max = 10)
-  @Column(name = "NIF")
   private String nif;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcliente")
-  private Collection<Ventas> ventasCollection;
+  private List<Ventas> ventasCollection;
 
   public Clientes() {
   }
@@ -126,12 +107,11 @@ public class Clientes implements Serializable {
     this.nif = nif;
   }
 
-  @XmlTransient
-  public Collection<Ventas> getVentasCollection() {
+  public List<Ventas> getVentasCollection() {
     return ventasCollection;
   }
 
-  public void setVentasCollection(Collection<Ventas> ventasCollection) {
+  public void setVentasCollection(List<Ventas> ventasCollection) {
     this.ventasCollection = ventasCollection;
   }
 

@@ -2,28 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package com.jgc.proyectojpa.controllers;
 
 import com.jgc.proyectojpa.exceptions.IllegalOrphanException;
 import com.jgc.proyectojpa.exceptions.NonexistentEntityException;
 import com.jgc.proyectojpa.exceptions.PreexistingEntityException;
 import com.jgc.proyectojpa.model.Productos;
-import com.jgc.proyectojpa.model.Ventas;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import com.jgc.proyectojpa.model.Ventas;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
  *
- * @author rezzt
+ * @author JGC by Juan Garcia Cazallas
+ * @version 1.0
+ * Created on 13 dic 2024
  */
 public class ProductosJpaController implements Serializable {
 
@@ -206,5 +208,5 @@ public class ProductosJpaController implements Serializable {
       em.close();
     }
   }
-  
+
 }

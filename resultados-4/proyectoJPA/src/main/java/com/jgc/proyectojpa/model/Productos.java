@@ -14,13 +14,9 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -30,7 +26,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "PRODUCTOS")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Productos.findAll", query = "SELECT p FROM Productos p"),
   @NamedQuery(name = "Productos.findById", query = "SELECT p FROM Productos p WHERE p.id = :id"),
@@ -43,23 +38,15 @@ public class Productos implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "ID")
   private Short id;
   @Basic(optional = false)
-  @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "DESCRIPCION")
   private String descripcion;
-  @Column(name = "STOCKACTUAL")
   private Short stockactual;
-  @Column(name = "STOCKMINIMO")
   private Short stockminimo;
   // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-  @Column(name = "PVP")
   private BigDecimal pvp;
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "idproducto")
-  private Collection<Ventas> ventasCollection;
+  private List<Ventas> ventasCollection;
 
   public Productos() {
   }
@@ -113,12 +100,11 @@ public class Productos implements Serializable {
     this.pvp = pvp;
   }
 
-  @XmlTransient
-  public Collection<Ventas> getVentasCollection() {
+  public List<Ventas> getVentasCollection() {
     return ventasCollection;
   }
 
-  public void setVentasCollection(Collection<Ventas> ventasCollection) {
+  public void setVentasCollection(List<Ventas> ventasCollection) {
     this.ventasCollection = ventasCollection;
   }
 

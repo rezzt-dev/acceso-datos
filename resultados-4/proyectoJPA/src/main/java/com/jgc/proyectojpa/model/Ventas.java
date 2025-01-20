@@ -6,7 +6,6 @@
 package com.jgc.proyectojpa.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -14,10 +13,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,7 +24,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "VENTAS")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Ventas.findAll", query = "SELECT v FROM Ventas v"),
   @NamedQuery(name = "Ventas.findByIdventa", query = "SELECT v FROM Ventas v WHERE v.idventa = :idventa"),
@@ -40,17 +34,10 @@ public class Ventas implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "IDVENTA")
   private Integer idventa;
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "FECHAVENTA")
-  @Temporal(TemporalType.TIMESTAMP)
   private Date fechaventa;
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "CANTIDAD")
   private short cantidad;
   @JoinColumn(name = "IDCLIENTE", referencedColumnName = "ID")
   @ManyToOne(optional = false)

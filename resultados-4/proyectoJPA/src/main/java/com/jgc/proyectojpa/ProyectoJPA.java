@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
+import java.util.List;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +39,7 @@ public class ProyectoJPA {
   }
   
   public static void inicializarFactory () {
-    emFactory = Persistence.createEntityManagerFactory("com.jgc_proyectoJPA_jar_1.0-SNAPSHOTPU");
+    emFactory = Persistence.createEntityManagerFactory("objectdb://localhost/proyecto.odb;user=admin;password=admin");
     entityManager = emFactory.createEntityManager();
   }
   
@@ -62,7 +62,7 @@ public class ProyectoJPA {
     System.out.println(" > Departamento: " + dept.getDeptNo() + " | Nombre: " + dept.getDnombre() + " | Loc: " + dept.getLoc());
     System.out.println(" > Lista de Empleados: ");
     
-    Collection<Empleados> listEmple = dept.getEmpleadosCollection();
+    List<Empleados> listEmple = dept.getEmpleadosCollection();
     Iterator<Empleados> it = listEmple.iterator();
     
     while (it.hasNext()) {
@@ -182,7 +182,7 @@ public class ProyectoJPA {
     entityManager.getTransaction().commit();
     
     if (departamentos != null) {
-      Collection<Empleados> listEmple = departamentos.getEmpleadosCollection();
+      List<Empleados> listEmple = departamentos.getEmpleadosCollection();
       System.out.println(" > Lista de Empleados sin Actualizar: ");
       
       for (Empleados tempEmple : listEmple) {

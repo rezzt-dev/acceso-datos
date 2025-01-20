@@ -18,7 +18,6 @@ import com.jgc.proyectojpa.model.Ventas;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class ClientesJpaController implements Serializable {
     try {
       em = getEntityManager();
       em.getTransaction().begin();
-      Collection<Ventas> attachedVentasCollection = new ArrayList<Ventas>();
+      List<Ventas> attachedVentasCollection = new ArrayList<Ventas>();
       for (Ventas ventasCollectionVentasToAttach : clientes.getVentasCollection()) {
         ventasCollectionVentasToAttach = em.getReference(ventasCollectionVentasToAttach.getClass(), ventasCollectionVentasToAttach.getIdventa());
         attachedVentasCollection.add(ventasCollectionVentasToAttach);
@@ -81,8 +80,8 @@ public class ClientesJpaController implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       Clientes persistentClientes = em.find(Clientes.class, clientes.getId());
-      Collection<Ventas> ventasCollectionOld = persistentClientes.getVentasCollection();
-      Collection<Ventas> ventasCollectionNew = clientes.getVentasCollection();
+      List<Ventas> ventasCollectionOld = persistentClientes.getVentasCollection();
+      List<Ventas> ventasCollectionNew = clientes.getVentasCollection();
       List<String> illegalOrphanMessages = null;
       for (Ventas ventasCollectionOldVentas : ventasCollectionOld) {
         if (!ventasCollectionNew.contains(ventasCollectionOldVentas)) {
@@ -95,7 +94,7 @@ public class ClientesJpaController implements Serializable {
       if (illegalOrphanMessages != null) {
         throw new IllegalOrphanException(illegalOrphanMessages);
       }
-      Collection<Ventas> attachedVentasCollectionNew = new ArrayList<Ventas>();
+      List<Ventas> attachedVentasCollectionNew = new ArrayList<Ventas>();
       for (Ventas ventasCollectionNewVentasToAttach : ventasCollectionNew) {
         ventasCollectionNewVentasToAttach = em.getReference(ventasCollectionNewVentasToAttach.getClass(), ventasCollectionNewVentasToAttach.getIdventa());
         attachedVentasCollectionNew.add(ventasCollectionNewVentasToAttach);
@@ -144,7 +143,7 @@ public class ClientesJpaController implements Serializable {
         throw new NonexistentEntityException("The clientes with id " + id + " no longer exists.", enfe);
       }
       List<String> illegalOrphanMessages = null;
-      Collection<Ventas> ventasCollectionOrphanCheck = clientes.getVentasCollection();
+      List<Ventas> ventasCollectionOrphanCheck = clientes.getVentasCollection();
       for (Ventas ventasCollectionOrphanCheckVentas : ventasCollectionOrphanCheck) {
         if (illegalOrphanMessages == null) {
           illegalOrphanMessages = new ArrayList<String>();

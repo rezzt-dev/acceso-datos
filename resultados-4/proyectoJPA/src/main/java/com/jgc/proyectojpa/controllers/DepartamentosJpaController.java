@@ -17,7 +17,6 @@ import com.jgc.proyectojpa.model.Empleados;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class DepartamentosJpaController implements Serializable {
     try {
       em = getEntityManager();
       em.getTransaction().begin();
-      Collection<Empleados> attachedEmpleadosCollection = new ArrayList<Empleados>();
+      List<Empleados> attachedEmpleadosCollection = new ArrayList<Empleados>();
       for (Empleados empleadosCollectionEmpleadosToAttach : departamentos.getEmpleadosCollection()) {
         empleadosCollectionEmpleadosToAttach = em.getReference(empleadosCollectionEmpleadosToAttach.getClass(), empleadosCollectionEmpleadosToAttach.getEmpNo());
         attachedEmpleadosCollection.add(empleadosCollectionEmpleadosToAttach);
@@ -80,9 +79,9 @@ public class DepartamentosJpaController implements Serializable {
       em = getEntityManager();
       em.getTransaction().begin();
       Departamentos persistentDepartamentos = em.find(Departamentos.class, departamentos.getDeptNo());
-      Collection<Empleados> empleadosCollectionOld = persistentDepartamentos.getEmpleadosCollection();
-      Collection<Empleados> empleadosCollectionNew = departamentos.getEmpleadosCollection();
-      Collection<Empleados> attachedEmpleadosCollectionNew = new ArrayList<Empleados>();
+      List<Empleados> empleadosCollectionOld = persistentDepartamentos.getEmpleadosCollection();
+      List<Empleados> empleadosCollectionNew = departamentos.getEmpleadosCollection();
+      List<Empleados> attachedEmpleadosCollectionNew = new ArrayList<Empleados>();
       for (Empleados empleadosCollectionNewEmpleadosToAttach : empleadosCollectionNew) {
         empleadosCollectionNewEmpleadosToAttach = em.getReference(empleadosCollectionNewEmpleadosToAttach.getClass(), empleadosCollectionNewEmpleadosToAttach.getEmpNo());
         attachedEmpleadosCollectionNew.add(empleadosCollectionNewEmpleadosToAttach);
@@ -136,7 +135,7 @@ public class DepartamentosJpaController implements Serializable {
       } catch (EntityNotFoundException enfe) {
         throw new NonexistentEntityException("The departamentos with id " + id + " no longer exists.", enfe);
       }
-      Collection<Empleados> empleadosCollection = departamentos.getEmpleadosCollection();
+      List<Empleados> empleadosCollection = departamentos.getEmpleadosCollection();
       for (Empleados empleadosCollectionEmpleados : empleadosCollection) {
         empleadosCollectionEmpleados.setDeptNo(null);
         empleadosCollectionEmpleados = em.merge(empleadosCollectionEmpleados);

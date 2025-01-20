@@ -6,19 +6,14 @@
 package com.jgc.proyectojpa.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -28,7 +23,6 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "DEPARTAMENTOS")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Departamentos.findAll", query = "SELECT d FROM Departamentos d"),
   @NamedQuery(name = "Departamentos.findByDeptNo", query = "SELECT d FROM Departamentos d WHERE d.deptNo = :deptNo"),
@@ -39,17 +33,11 @@ public class Departamentos implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "DEPT_NO")
   private Short deptNo;
-  @Size(max = 15)
-  @Column(name = "DNOMBRE")
   private String dnombre;
-  @Size(max = 15)
-  @Column(name = "LOC")
   private String loc;
   @OneToMany(mappedBy = "deptNo")
-  private Collection<Empleados> empleadosCollection;
+  private List<Empleados> empleadosCollection;
 
   public Departamentos() {
   }
@@ -82,12 +70,11 @@ public class Departamentos implements Serializable {
     this.loc = loc;
   }
 
-  @XmlTransient
-  public Collection<Empleados> getEmpleadosCollection() {
+  public List<Empleados> getEmpleadosCollection() {
     return empleadosCollection;
   }
 
-  public void setEmpleadosCollection(Collection<Empleados> empleadosCollection) {
+  public void setEmpleadosCollection(List<Empleados> empleadosCollection) {
     this.empleadosCollection = empleadosCollection;
   }
 

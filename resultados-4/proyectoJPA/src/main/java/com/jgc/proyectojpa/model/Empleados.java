@@ -14,11 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,7 +26,6 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "EMPLEADOS")
-@XmlRootElement
 @NamedQueries({
   @NamedQuery(name = "Empleados.findAll", query = "SELECT e FROM Empleados e"),
   @NamedQuery(name = "Empleados.findByEmpNo", query = "SELECT e FROM Empleados e WHERE e.empNo = :empNo"),
@@ -46,19 +40,10 @@ public class Empleados implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
-  @NotNull
-  @Column(name = "EMP_NO")
   private Short empNo;
-  @Size(max = 10)
-  @Column(name = "APELLIDO")
   private String apellido;
-  @Size(max = 10)
-  @Column(name = "OFICIO")
   private String oficio;
-  @Column(name = "DIR")
   private Short dir;
-  @Column(name = "FECHA_ALT")
-  @Temporal(TemporalType.TIMESTAMP)
   private Date fechaAlt;
   // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
   @Column(name = "SALARIO")
