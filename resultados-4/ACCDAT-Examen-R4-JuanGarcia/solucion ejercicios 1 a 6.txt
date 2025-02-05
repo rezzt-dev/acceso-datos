@@ -1,0 +1,128 @@
+-----------------------------------------------------
+--NOMBRE Y APELLIDOS: Juan Garcia Cazallas
+--NOTA:
+--OBSERVACIONES:
+----------------------------------------------------
+
+-----------------------------------------------------
+--EJERCICIO 1:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create or replace type piloto as object (
+    dni varchar2(9),
+    horas_de_vuelo number(6),
+    horas_de_vuelo_anual number(6)
+);
+
+-----------------------------------------------------
+--EJERCICIO 2:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create or replace type vuelo as object (
+    idVuelo number(10),
+    compania varchar2(30),
+    piloto_avion piloto,
+    
+    member procedure vuelo_datos,
+    constructor function vuelo (v_idvuelo number, v_compania varchar2) return self as result
+) not final;
+/
+create or replace type body vuelo as
+    member procedure vuelo_datos is
+        begin
+            dbms_output.put_line(idVuelo || '-' || piloto_avion.dni);
+        end;
+        
+    constructor function vuelo (v_idvuelo number, v_compania varchar2) return self as result is
+        begin
+            self.idVuelo := v_idvuelo;
+            self.compania := v_compania;
+            self.piloto_avion := null;
+        end;
+end;
+
+-----------------------------------------------------
+--EJERCICIO 3:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create or replace type vuelo_mercancias under vuelo (
+    kilos_de_carga number(5),
+    precio_por_kilo number(2),
+    
+    overriding member procedure vuelo_datos,
+    member function coste_transporte return number
+);
+/
+create or replace type body vuelo_mercancias as
+    overriding member procedure vuelo_datos is
+        begin
+            dbms_output.put_line(idVuelo || ' - ' || piloto_avion.dni || ' - ' || kilos_de_carga);
+        end;
+    
+    member function coste_transporte return number is
+        begin
+            return (kilos_de_carga * precio_por_kilo);
+        end;
+end;
+
+-----------------------------------------------------
+--EJERCICIO 4:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create table t_vuelos_mercancias of vuelo_mercancias (
+    idVuelo primary key
+);
+
+
+-----------------------------------------------------
+--EJERCICIO 5:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create type plantilla_rutas as table of vuelo_mercancias;
+
+create table t_rutas (
+    idRuta number(5) primary key,
+    origen varchar2(100),
+    destino varchar2(100),
+    vuelos plantilla_rutas
+) nested table vuelos store as lista_vuelos;
+
+-----------------------------------------------------
+--EJERCICIO 6:
+--NOTA:
+--OBSERVACIONES:
+-----------------------------------------------------
+--Escribe aquí tu respuesta:
+create or replace procedure p_inserta_vuelo_en_ruta (p_idRuta number, p_vuelo_merc vuelo_mercancias) is
+        t_idRutaTabla number;
+        t_vuelosTutaTabla plantilla_rutas;
+        v_idRuta number := p_idRuta;
+        v_vuelo_merc vuelo_mercancias := p_vuelo_merc;
+    begin
+        select idRuta into t_idRutaTabla from t_rutas where idRuta = v_idRuta;
+        
+        if (t_idRutaTabla is null) then
+            dbms_output.put_line('error, el id introducido no existe');
+        else
+            select vuelos into t_vuelosTutaTabla from t_rutas where idRuta = t_idRutaTabla;
+            if t_vuelosTutaTabla is empty then
+                dbms_output.put_line('la tabla anidada de vuelos esta vacia');
+            else
+                insert into table (select vuelos from t_rutas where idRuta = t_idRutaTabla) values (v_vuelo_merc);
+            end if;
+        end if;
+    end;
+
+
+-----------------------------------------------------
+
