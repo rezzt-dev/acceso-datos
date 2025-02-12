@@ -121,7 +121,7 @@ public class OperacionesBBDD {
     try {
       XQExpression xqConsulta = connection.createExpression();
         
-      String consulta = "update replace /universidad/departamento[codigo='MAT1']/empleado/@salario with /universidad/departamento[codigo='MAT1']/empleado/@salario + 100";
+      String consulta = "for $em in /universidad/departamento[codigo='MAT1']/empleado" + "let $sal := data($em/@salario)" + "return update value $em/@salario" + "with data($sal)+100";
 
       xqConsulta.executeCommand(consulta);
     } catch (XQException ex) {
@@ -139,7 +139,7 @@ public class OperacionesBBDD {
     try {
       XQExpression xqConsulta = connection.createExpression();
       String consulta = "/universidad/departamento[codigo='" + codDept + "']";
-
+      
       XQResultSequence xqResultado = xqConsulta.executeQuery(consulta);
       XQResultItem resultItem;
       while (xqResultado.next()) {
@@ -151,5 +151,114 @@ public class OperacionesBBDD {
       Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
+  
+   //-----------------------------------------------------------------------------------------------------------------------------------------
+    // metodo de insercion de departamento
+  public void insertDep () {
+    Scanner scanner = new Scanner(System.in);
+    boolean operacionRealizada = true;
+    
+    System.out.print("\n -> ingresa el codigo del departameto: ");
+    String deptNo = scanner.nextLine();
+    
+    System.out.print("\n -> ingresa el nombre del departameto: ");
+    String dNombre = scanner.nextLine();
+    
+    System.out.print("\n -> ingresa la localidad del departameto: ");
+    String locDept = scanner.nextLine();
+    
+    while (operacionRealizada) {
+      try {
+      XQExpression xqConsulta = connection.createExpression();
+      String consultaExist = "exists(/departamentos/DEP_ROW[DEPT_NO='" + deptNo + "'])";
+      XQResultSequence result = xqConsulta.executeQuery(consultaExist);
+      
+      if (result.next() && result.getBoolean()) {
+        System.out.println("  => no se puede insertar el departamento, ya existe uno con el mismo codigo.");
+        operacionRealizada = false;
+      }
+      
+      String insertQuery = "update insert <DEP_ROW><DEPT_NO>" + deptNo + "</DEPT_NO><DNOMBRE>" + dNombre + "</DNOMBRE><LOC>" + locDept + "</LOC></DEP_ROW> into /departamentos";
+      xqConsulta.executeCommand(insertQuery);
+      
+      
+      System.out.println("  - departamento insertado correctamente.");
+      operacionRealizada = false;
+      
+      } catch (XQException ex) {
+        Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+  
+    // metodo de modificacion de un departamento
+  public void modificarDep () {
+    Scanner scanner = new Scanner(System.in);
+    boolean operacionRealizada = true;
+    
+    System.out.print("\n -> ingresa el codigo del departamento a modificar: ");
+    String deptNo = scanner.nextLine();
+    
+    System.out.print("\n -> ingresa el nuevo nombre del departamento: ");
+    String dNombre = scanner.nextLine();
+    
+    System.out.print("\n -> ingresa la nueva localidad del departamento: ");
+    String locDept = scanner.nextLine();
+    
+    while (operacionRealizada) {
+      try {
+        XQExpression xqConsulta = connection.createExpression();
+        String consultaExist = "exists(/departamentos/DEP_ROW[DEPT_NO='" + deptNo + "'])";
+        XQResultSequence result = xqConsulta.executeQuery(consultaExist);
+        
+        if (result.next() && !result.getBoolean()) {
+          System.out.println("  => no se puede modificar el departamento, el departamento no existe.");
+          operacionRealizada = false; 
+        }
+        
+        String updateQuery = "update value /departamentos/DEP_ROW[DEPT_NO='" + deptNo + "']/DNOMBRE with '" + dNombre + "'";
+        xqConsulta.executeCommand(updateQuery);
+        
+        updateQuery = "update value /departamentos/DEP_ROW[DEPT_NO='" + deptNo + "']/LOC with '" + locDept + "'";
+        xqConsulta.executeCommand(updateQuery);
+        
+        System.out.println("  - departamento modificado correctamente.");
+        operacionRealizada = false;
+        
+      } catch (XQException ex) {
+        Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+  }
+  
+    // metodo de eliminacion de un departamento
+  public void borrarDep () {
+    Scanner scanner = new Scanner(System.in);
+    boolean operacionRealizada = true;
+    
+    System.out.print("\n -> ingresa el codigo del departameto: ");
+    String deptNo = scanner.nextLine();
+    
+    while (operacionRealizada) {
+      try {
+        XQExpression xqConsulta = connection.createExpression();
+        String consultaExist = "exists(/departamentos/DEP_ROW[DEPT_NO='" + deptNo + "'])";
+        XQResultSequence result = xqConsulta.executeQuery(consultaExist);
 
+        if (result.next() && !result.getBoolean()) {
+          System.out.println("  => no se puede eliminar el departamento, el departamento no existe.");
+          operacionRealizada = false; 
+        }
+        
+        String deleteQuery = "update delete /departamentos/DEP_ROW[DEPT_NO='" + deptNo + "']";
+        xqConsulta.executeCommand(deleteQuery);
+        
+        System.out.println("  - departamento borrado correctamente.");
+        operacionRealizada = false;
+      
+      } catch (XQException ex) {
+        Logger.getLogger(OperacionesBBDD.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+  }
 }
